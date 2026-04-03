@@ -1,27 +1,26 @@
-import { Analizador } from "../Analizador";
-import { Automata } from "./automata/Automata";
-import { Estado } from "./estados/Estado";
-import { Transicion } from "./estados/Transicion";
+import { Creador } from "../CreadorGramatica/Creador";
 import { Expresion } from "./Expresion";
 
 export class Cadena extends Expresion{
 
     constructor(cadena: string){
         super()
-        let estados: Estado[] = []
-        let estadoAnterior: Estado = new Estado()
-        for(let i = 0; i < cadena.length; i++){
-            let caracter: string = cadena.charAt(i)
-            let estado: Estado = new Estado(i === cadena.length - 1)
-            let transi: Transicion = new Transicion(caracter, estado)
-            estadoAnterior.agregarTransicion(transi)
-            estadoAnterior = estado
+        let aux: string = cadena.slice(1, -1)
+        for(let i = 0; i < aux.length; i++){
+            switch(aux.charAt(i)){
+                case '(': case ')': case '[': case ']': case '.': case '$':
+                case '+': case '*': case '?': case '{': case '}': case '\\':
+                case '^': case '|':
+                    this.exprReg += '\\' + aux.charAt(i)
+                    break
+                default:
+                    this.exprReg += aux.charAt(i)
+            }
         }
-        this.automata.setEstados(estados)
     }
 
-    obtenerAFND(analizador: Analizador): Automata {
-        return this.automata
+    obtenerExprReg(creador: Creador): string {
+        return this.exprReg
     }
 
 }

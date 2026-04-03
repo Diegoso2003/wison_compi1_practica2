@@ -1,8 +1,7 @@
-import { Analizador } from "../Analizador";
-import { Automata } from "./automata/Automata";
+import { Creador } from "../CreadorGramatica/Creador";
 
 export abstract class Expresion{
-    protected automata: Automata = new Automata()
+    protected exprReg: string = ""
 
-    abstract obtenerAFND(analizador: Analizador): Automata;
+    abstract obtenerExprReg(creador: Creador): string;
 }

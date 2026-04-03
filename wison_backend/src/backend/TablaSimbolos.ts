@@ -1,17 +1,15 @@
-import { Expresion } from "./lexer/Expresion";
-
 export class TablaSimbolos {
-    private tablaSimbolos = new Map<string, Expresion>()
+    private tablaSimbolos = new Map<string, string>()
 
     public existeEnTabla(nombre: string): boolean{
         return this.tablaSimbolos.get(nombre) !== undefined
     }
 
-    public agregarALaTabla(nombre: string, expresion: Expresion): void{
+    public agregarALaTabla(nombre: string, expresion: string): void{
         this.tablaSimbolos.set(nombre, expresion)
     }
 
-    public conseguirExpresion(nombre: string): Expresion{
+    public conseguirExpresion(nombre: string): string{
         return this.tablaSimbolos.get(nombre)!
     }
 }

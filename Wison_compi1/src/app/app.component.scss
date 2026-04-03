@@ -1,0 +1,756 @@
+// ============================================
+// PALETA EDITOR DE CÓDIGO (Moderna y Profesional)
+// ============================================
+
+// Colores base (inspirados en VS Code Dark+)
+$editor-bg: #1e1e2e;        // Fondo principal (gris azulado oscuro)
+$editor-sidebar: #181825;    // Barra lateral (más oscuro)
+$editor-surface: #2a2a3a;    // Superficies (cards, paneles)
+$editor-line: #313244;        // Líneas divisorias, bordes
+
+// Colores de acento (para destacar elementos interactivos)
+$accent-primary: #7e6b9e;    // Púrpura suave (primario)
+$accent-secondary: #4a9eff;  // Azul brillante (secundario)
+$accent-success: #6b9e7e;    // Verde (éxito, validación)
+$accent-warning: #e6b450;    // Ámbar (advertencias)
+$accent-error: #f28b82;      // Rojo coral (errores)
+
+// Texto base
+$text-primary: #e1e1e6;       // Texto principal (blanco grisáceo)
+$text-secondary: #a1a1b0;     // Texto secundario (gris)
+$text-muted: #6c6f93;         // Texto deshabilitado
+
+// Fondos de estados
+$hover-bg: rgba($accent-primary, 0.1);
+$active-bg: rgba($accent-primary, 0.2);
+$error-bg: rgba($accent-error, 0.1);
+$success-bg: rgba($accent-success, 0.1);
+$warning-bg: rgba($accent-warning, 0.1);
+
+// ============================================
+// VARIABLES (mapeo para compatibilidad)
+// ============================================
+
+$dark-bg: $editor-bg;
+$light-bg: $editor-surface;
+$primary: $accent-primary;
+$secondary: $accent-secondary;
+$accent: $accent-primary;
+
+// Variables de tipografía
+$font-mono: 'Fira Code', 'JetBrains Mono', 'Cascadia Code', 'Courier New', monospace;
+$font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+// Variables de espaciado
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+
+// Variables de bordes
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+
+// Sombras
+$shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+
+// Transiciones
+$transition-fast: 0.2s ease;
+$transition-normal: 0.3s ease;
+
+// ============================================
+// MIXINS UTILITARIOS
+// ============================================
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@mixin card-hover {
+    transition: transform $transition-fast, box-shadow $transition-fast;
+    
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: $shadow-lg;
+    }
+}
+
+@mixin scrollbar {
+    &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: rgba($text-primary, 0.1);
+        border-radius: $border-radius-sm;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background: $accent-secondary;
+        border-radius: $border-radius-sm;
+        
+        &:hover {
+            background: lighten($accent-secondary, 10%);
+        }
+    }
+}
+
+// ============================================
+// ESTILOS GLOBALES
+// ============================================
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: $font-sans;
+    background-color: $editor-bg;
+    color: $text-primary;
+    line-height: 1.6;
+}
+
+// ============================================
+// HEADER COMPONENT
+// ============================================
+
+.custom-header {
+    background-color: $editor-sidebar;
+    color: $text-primary;
+    padding: $spacing-md $spacing-xl;
+    box-shadow: $shadow-md;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 2px solid $accent-primary;
+    
+    .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        @include flex-between;
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        
+        i {
+            color: $accent-primary;
+            margin-right: $spacing-sm;
+        }
+        
+        span {
+            background: linear-gradient(135deg, $text-primary, $accent-secondary);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+    }
+    
+    .nav-links {
+        display: flex;
+        gap: $spacing-lg;
+        
+        a {
+            color: $text-primary;
+            text-decoration: none;
+            transition: color $transition-fast;
+            
+            &:hover {
+                color: $accent-secondary;
+            }
+        }
+    }
+}
+
+// ============================================
+// CARD COMPONENTS
+// ============================================
+
+.custom-card {
+    background-color: $editor-surface;
+    border: 1px solid $editor-line;
+    border-radius: $border-radius-md;
+    padding: $spacing-lg;
+    margin: $spacing-md;
+    box-shadow: $shadow-sm;
+    @include card-hover;
+    
+    &-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: $spacing-md;
+        color: $accent-secondary;
+        border-left: 4px solid $accent-primary;
+        padding-left: $spacing-md;
+    }
+    
+    &-content {
+        margin-bottom: $spacing-md;
+        color: $text-secondary;
+    }
+    
+    &-footer {
+        margin-top: $spacing-md;
+        padding-top: $spacing-md;
+        border-top: 1px solid $editor-line;
+    }
+}
+
+// ============================================
+// BUTTON COMPONENTS
+// ============================================
+
+.custom-button {
+    background-color: $accent-primary;
+    color: $text-primary;
+    padding: $spacing-sm $spacing-lg;
+    border: none;
+    border-radius: $border-radius-sm;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all $transition-fast;
+    
+    &:hover {
+        background-color: lighten($accent-primary, 10%);
+        transform: translateY(-1px);
+        box-shadow: $shadow-sm;
+    }
+    
+    &:active {
+        transform: translateY(0);
+    }
+    
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        
+        &:hover {
+            transform: none;
+        }
+    }
+    
+    &-secondary {
+        background-color: $accent-secondary;
+        
+        &:hover {
+            background-color: lighten($accent-secondary, 10%);
+        }
+    }
+    
+    &-outline {
+        background-color: transparent;
+        border: 2px solid $accent-primary;
+        color: $accent-primary;
+        
+        &:hover {
+            background-color: $accent-primary;
+            color: $text-primary;
+        }
+    }
+    
+    &-success {
+        background-color: $accent-success;
+        
+        &:hover {
+            background-color: lighten($accent-success, 10%);
+        }
+    }
+    
+    &-warning {
+        background-color: $accent-warning;
+        color: $editor-bg;
+        
+        &:hover {
+            background-color: lighten($accent-warning, 10%);
+        }
+    }
+    
+    &-error {
+        background-color: $accent-error;
+        
+        &:hover {
+            background-color: lighten($accent-error, 10%);
+        }
+    }
+}
+
+// ============================================
+// TEXTAREA PARA CÓDIGO (CLASE PRINCIPAL)
+// ============================================
+
+.code-textarea {
+    width: 100%;
+    min-height: 400px;
+    background-color: $editor-bg;
+    color: $text-primary;
+    font-family: $font-mono;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: $spacing-lg;
+    border: 1px solid $editor-line;
+    border-radius: $border-radius-md;
+    resize: vertical;
+    outline: none;
+    transition: all $transition-fast;
+    
+    &:focus {
+        border-color: $accent-primary;
+        box-shadow: 0 0 0 2px rgba($accent-primary, 0.2);
+    }
+    
+    &::placeholder {
+        color: $text-muted;
+        font-family: $font-sans;
+        font-size: 13px;
+    }
+    
+    // Estilo para cuando está deshabilitado
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    // Estilo para lectura
+    &-readonly {
+        background-color: $editor-sidebar;
+        cursor: default;
+    }
+}
+
+// ============================================
+// EDITOR DE CÓDIGO (alternativa para div editable)
+// ============================================
+
+.code-editor {
+    background-color: $editor-bg;
+    color: $text-primary;
+    font-family: $font-mono;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: $spacing-lg;
+    border-radius: $border-radius-md;
+    overflow-x: auto;
+    border: 1px solid $editor-line;
+    @include scrollbar;
+    
+    pre {
+        margin: 0;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+    
+    &:focus-within {
+        border-color: $accent-primary;
+        box-shadow: 0 0 0 2px rgba($accent-primary, 0.2);
+    }
+}
+
+// ============================================
+// TABLA DE TOKENS
+// ============================================
+
+.tokens-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: $editor-surface;
+    border-radius: $border-radius-md;
+    overflow: hidden;
+    box-shadow: $shadow-sm;
+    
+    th {
+        background-color: $editor-sidebar;
+        color: $accent-secondary;
+        padding: $spacing-sm $spacing-md;
+        text-align: left;
+        font-weight: 600;
+        font-family: $font-mono;
+        font-size: 13px;
+    }
+    
+    td {
+        padding: $spacing-sm $spacing-md;
+        border-bottom: 1px solid $editor-line;
+        font-family: $font-mono;
+        font-size: 13px;
+        color: $text-secondary;
+        
+        &:first-child {
+            font-weight: 500;
+            color: $accent-primary;
+        }
+    }
+    
+    tr:hover {
+        background-color: $hover-bg;
+    }
+}
+
+// ============================================
+// ÁRBOL SINTÁCTICO
+// ============================================
+
+.syntax-tree {
+    background-color: $editor-surface;
+    padding: $spacing-lg;
+    border-radius: $border-radius-md;
+    overflow-x: auto;
+    border: 1px solid $editor-line;
+    @include scrollbar;
+    
+    .tree-node {
+        position: relative;
+        padding: $spacing-sm;
+        margin-left: $spacing-lg;
+        border-left: 2px solid $accent-secondary;
+        
+        &::before {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: 50%;
+            width: $spacing-lg;
+            height: 2px;
+            background-color: $accent-secondary;
+        }
+        
+        .node-content {
+            background-color: rgba($accent-secondary, 0.1);
+            padding: $spacing-sm $spacing-md;
+            border-radius: $border-radius-sm;
+            display: inline-block;
+            font-family: $font-mono;
+            font-size: 13px;
+            color: $text-primary;
+            
+            &:hover {
+                background-color: rgba($accent-secondary, 0.2);
+            }
+        }
+    }
+}
+
+// ============================================
+// PANEL DE ERRORES
+// ============================================
+
+.error-panel {
+    background-color: $error-bg;
+    border-left: 4px solid $accent-error;
+    padding: $spacing-md;
+    margin: $spacing-md 0;
+    border-radius: $border-radius-sm;
+    
+    &-title {
+        color: $accent-error;
+        font-weight: bold;
+        margin-bottom: $spacing-sm;
+    }
+    
+    &-list {
+        list-style: none;
+        padding-left: 0;
+        
+        li {
+            padding: $spacing-xs 0;
+            font-family: $font-mono;
+            font-size: 13px;
+            color: $text-secondary;
+            
+            &::before {
+                content: '✗ ';
+                color: $accent-error;
+                margin-right: $spacing-sm;
+            }
+        }
+    }
+}
+
+// ============================================
+// PANEL DE ÉXITO
+// ============================================
+
+.success-panel {
+    background-color: $success-bg;
+    border-left: 4px solid $accent-success;
+    padding: $spacing-md;
+    margin: $spacing-md 0;
+    border-radius: $border-radius-sm;
+    
+    &-title {
+        color: $accent-success;
+        font-weight: bold;
+        margin-bottom: $spacing-sm;
+    }
+    
+    &-list {
+        list-style: none;
+        padding-left: 0;
+        
+        li {
+            padding: $spacing-xs 0;
+            font-family: $font-mono;
+            font-size: 13px;
+            color: $text-secondary;
+            
+            &::before {
+                content: '✓ ';
+                color: $accent-success;
+                margin-right: $spacing-sm;
+            }
+        }
+    }
+}
+
+// ============================================
+// LAYOUT DE DOS COLUMNAS
+// ============================================
+
+.split-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-lg;
+    margin: $spacing-lg 0;
+    
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// ============================================
+// BARRA DE HERRAMIENTAS
+// ============================================
+
+.toolbar {
+    background-color: $editor-sidebar;
+    padding: $spacing-sm $spacing-md;
+    border-radius: $border-radius-md;
+    @include flex-between;
+    margin-bottom: $spacing-md;
+    border: 1px solid $editor-line;
+    
+    .toolbar-group {
+        display: flex;
+        gap: $spacing-sm;
+    }
+}
+
+// ============================================
+// UTILIDADES
+// ============================================
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 $spacing-xl;
+}
+
+.text-center { text-align: center; }
+.text-mono { font-family: $font-mono; }
+.text-primary { color: $text-primary; }
+.text-secondary { color: $text-secondary; }
+.text-accent { color: $accent-primary; }
+
+.mt-1 { margin-top: $spacing-sm; }
+.mt-2 { margin-top: $spacing-md; }
+.mt-3 { margin-top: $spacing-lg; }
+.mb-1 { margin-bottom: $spacing-sm; }
+.mb-2 { margin-bottom: $spacing-md; }
+.mb-3 { margin-bottom: $spacing-lg; }
+
+// ============================================
+// NAVBAR ESPECÍFICO
+// ============================================
+
+.custom-header {
+    background-color: $editor-sidebar;
+    padding: $spacing-sm $spacing-xl;
+    box-shadow: $shadow-md;
+    border-bottom: 2px solid $accent-primary;
+    
+    .creative-span {
+        font-size: 1.8rem;
+        font-weight: bold;
+        background: linear-gradient(135deg, $text-primary, $accent-secondary);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        letter-spacing: 1px;
+        transition: all $transition-fast;
+        
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+    
+    .nav-links {
+        gap: $spacing-xl;
+    }
+    
+    .nav-item-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: $spacing-sm $spacing-md;
+        border-radius: $border-radius-md;
+        transition: all $transition-fast;
+        text-decoration: none;
+        color: $text-primary;
+        
+        &:hover {
+            background-color: $hover-bg;
+            transform: translateY(-2px);
+            
+            .nav-icon {
+                color: $accent-secondary;
+                transform: scale(1.1);
+            }
+            
+            .nav-text {
+                color: $accent-secondary;
+            }
+        }
+        
+        .nav-icon {
+            transition: all $transition-fast;
+            margin-bottom: $spacing-xs;
+        }
+        
+        .nav-text {
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: color $transition-fast;
+        }
+    }
+    
+    .custom-toggler {
+        border-color: rgba($accent-secondary, 0.5);
+        
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(74, 158, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+        
+        &:focus {
+            box-shadow: 0 0 0 3px rgba($accent-secondary, 0.3);
+        }
+    }
+}
+
+// ============================================
+// RESPONSIVE
+// ============================================
+
+@media (max-width: 992px) {
+    .custom-header {
+        padding: $spacing-sm $spacing-md;
+        
+        .creative-span {
+            font-size: 1.4rem;
+        }
+        
+        .nav-links {
+            gap: $spacing-md;
+            margin-top: $spacing-md;
+        }
+        
+        .nav-item-link {
+            padding: $spacing-sm;
+            
+            .nav-icon {
+                width: 20px;
+                height: 20px;
+            }
+            
+            .nav-text {
+                font-size: 0.7rem;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 $spacing-md;
+    }
+    
+    .custom-header {
+        .nav-links {
+            flex-direction: column;
+            gap: $spacing-sm;
+        }
+        
+        .nav-item-link {
+            flex-direction: row;
+            justify-content: center;
+            gap: $spacing-sm;
+            padding: $spacing-sm;
+            
+            .nav-icon {
+                margin-bottom: 0;
+            }
+            
+            br {
+                display: none;
+            }
+        }
+    }
+    
+    .custom-card {
+        padding: $spacing-md;
+    }
+    
+    .tokens-table {
+        font-size: 12px;
+        
+        th, td {
+            padding: $spacing-xs $spacing-sm;
+        }
+    }
+}
+
+// ============================================
+// ANIMACIONES
+// ============================================
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn $transition-normal;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}

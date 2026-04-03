@@ -1,8 +1,6 @@
-import { Analizador } from "../Analizador";
-import { MensajeError } from "../MensajeError";
+import { Creador } from "../CreadorGramatica/Creador";
 import { TablaSimbolos } from "../TablaSimbolos";
 import { Expresion } from "./Expresion";
-import { Automata } from "./automata/Automata";
 
 export class IdentiExpresion extends Expresion{
     private nombre: string
@@ -16,20 +14,19 @@ export class IdentiExpresion extends Expresion{
         this.linea = linea
     }
 
-    obtenerAFND(analizador: Analizador): Automata {
-        let tablaSimbolos: TablaSimbolos = analizador.getTabla()
+    obtenerExprReg(creador: Creador): string {
+        let tablaSimbolos: TablaSimbolos = creador.getTabla()
         if(tablaSimbolos.existeEnTabla(this.nombre)){
-            return tablaSimbolos.conseguirExpresion(this.nombre).obtenerAFND(analizador)
+            return tablaSimbolos.conseguirExpresion(this.nombre)
         }
-        let mensaje: MensajeError = {
-            descripcion: "expresion no declarada",
+        creador.getErrores().push({
+            descripcion: "terminal no declarado",
             tipo: "Semantico",
             lexema: this.nombre,
             linea: this.linea,
             columna: this.columna
-        }
-        analizador.getErrores().push(mensaje)
-        return new Automata
+        })
+        return "error"
     }
 
 }

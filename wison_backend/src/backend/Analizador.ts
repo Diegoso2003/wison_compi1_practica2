@@ -1,18 +1,15 @@
 import { MensajeError } from "./MensajeError";
-import { TablaSimbolos } from "./TablaSimbolos";
 
 const parser = require('../analizador/wison.js');
 
 export class Analizador {
     
     private errores: MensajeError[] = []
-    private tabla: TablaSimbolos = new TablaSimbolos()
 
     analizar(input: string): any {
         try {
             parser.yy = {
-                errores: this.errores,
-                tabla: this.tabla
+                errores: this.errores
             };
 
             if(input.length === 0){
@@ -52,10 +49,6 @@ export class Analizador {
                 }]
             };
         }
-    }
-
-    public getTabla(): TablaSimbolos{
-        return this.tabla
     }
 
     public getErrores(): MensajeError[]{

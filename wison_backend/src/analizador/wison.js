@@ -73,21 +73,96 @@
 */
 // @ts-nocheck
 var wison = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,15],$V1=[1,20],$V2=[14,23],$V3=[41,43],$V4=[1,32],$V5=[1,43],$V6=[1,40],$V7=[1,41],$V8=[1,42],$V9=[18,42],$Va=[27,32],$Vb=[27,31],$Vc=[27,32,34,35,36],$Vd=[27,47],$Ve=[1,58],$Vf=[1,57],$Vg=[1,56],$Vh=[1,63],$Vi=[27,47,49];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,15],$V1=[1,20],$V2=[14,23],$V3=[41,43],$V4=[1,32],$V5=[1,43],$V6=[1,44],$V7=[1,40],$V8=[1,41],$V9=[1,42],$Va=[18,42],$Vb=[27,32],$Vc=[27,32,34,35,36],$Vd=[27,47],$Ve=[1,59],$Vf=[1,58],$Vg=[27,31],$Vh=[24,27,42,47];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"analizador":3,"wison":4,"EOF":5,"WISON":6,"APERTURA":7,"lexico":8,"sintactico":9,"CIERRE":10,"LEX":11,"IN_LEX":12,"reglas_lexicas":13,"FIN_LEX":14,"SYNTAX":15,"IN_SYNTAX":16,"syntax":17,"FIN_SYNTAX":18,"no_terminales":19,"inicio":20,"producciones":21,"regla_lexica":22,"TERMINAL":23,"TERMINAL_NOMBRE":24,"FLECHA":25,"expr":26,"P_COMA":27,"unario":28,"combinado":29,"concatenacion":30,"PAREN_IZQ":31,"PAREN_DER":32,"simple":33,"KLEENE":34,"POSITIVO":35,"OPCIONAL":36,"CADENA":37,"LETRAS":38,"DIGITOS":39,"no_terminal":40,"NO_TERMINAL":41,"NO_TERMINAL_NOMBRE":42,"INICIO":43,"produccion":44,"ASIGNACION":45,"reglas":46,"OR":47,"estructura":48,"simbolo":49,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",6:"WISON",7:"APERTURA",10:"CIERRE",11:"LEX",12:"IN_LEX",14:"FIN_LEX",15:"SYNTAX",16:"IN_SYNTAX",18:"FIN_SYNTAX",23:"TERMINAL",24:"TERMINAL_NOMBRE",25:"FLECHA",27:"P_COMA",31:"PAREN_IZQ",32:"PAREN_DER",34:"KLEENE",35:"POSITIVO",36:"OPCIONAL",37:"CADENA",38:"LETRAS",39:"DIGITOS",41:"NO_TERMINAL",42:"NO_TERMINAL_NOMBRE",43:"INICIO",45:"ASIGNACION",47:"OR",49:"simbolo"},
-productions_: [0,[3,2],[4,6],[8,4],[9,4],[17,3],[13,2],[13,1],[22,5],[26,1],[26,1],[29,2],[29,1],[30,3],[30,3],[28,2],[28,2],[28,2],[28,1],[33,1],[33,1],[33,1],[19,2],[19,1],[40,3],[20,3],[21,2],[21,1],[44,4],[46,3],[46,1],[46,0],[48,2],[48,1],[48,1],[48,1]],
+symbols_: {"error":2,"analizador":3,"wison":4,"EOF":5,"WISON":6,"APERTURA":7,"lexico":8,"sintactico":9,"CIERRE":10,"LEX":11,"IN_LEX":12,"reglas_lexicas":13,"FIN_LEX":14,"SYNTAX":15,"IN_SYNTAX":16,"syntax":17,"FIN_SYNTAX":18,"no_terminales":19,"inicio":20,"producciones":21,"regla_lexica":22,"TERMINAL":23,"TERMINAL_NOMBRE":24,"FLECHA":25,"expr":26,"P_COMA":27,"unario":28,"combinado":29,"concatenacion":30,"PAREN_IZQ":31,"PAREN_DER":32,"simple":33,"KLEENE":34,"POSITIVO":35,"OPCIONAL":36,"CADENA":37,"LETRAS":38,"DIGITOS":39,"no_terminal":40,"NO_TERMINAL":41,"NO_TERMINAL_NOMBRE":42,"INICIO":43,"produccion":44,"ASIGNACION":45,"reglas":46,"OR":47,"listaSimbolos":48,"simbolo":49,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",6:"WISON",7:"APERTURA",10:"CIERRE",11:"LEX",12:"IN_LEX",14:"FIN_LEX",15:"SYNTAX",16:"IN_SYNTAX",18:"FIN_SYNTAX",23:"TERMINAL",24:"TERMINAL_NOMBRE",25:"FLECHA",27:"P_COMA",31:"PAREN_IZQ",32:"PAREN_DER",34:"KLEENE",35:"POSITIVO",36:"OPCIONAL",37:"CADENA",38:"LETRAS",39:"DIGITOS",41:"NO_TERMINAL",42:"NO_TERMINAL_NOMBRE",43:"INICIO",45:"ASIGNACION",47:"OR"},
+productions_: [0,[3,2],[4,6],[8,4],[9,4],[17,3],[13,2],[13,1],[22,5],[26,1],[26,1],[29,2],[29,2],[30,3],[28,2],[28,2],[28,2],[28,1],[33,1],[33,1],[33,1],[33,1],[19,2],[19,1],[40,3],[20,3],[21,2],[21,1],[44,4],[46,3],[46,2],[46,1],[46,0],[48,2],[48,1],[49,1],[49,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
+case 1:
+ this.$ = $$[$0-1]; 
+break;
+case 2:
+ this.$ = new Creador($$[$0-3], $$[$0-2]) 
+break;
+case 3: case 4: case 13:
+ this.$ = $$[$0-1] 
+break;
+case 5:
+ this.$ = new Syntax($$[$0-2], $$[$0-1], $$[$0]) 
+break;
+case 6: case 22: case 26: case 33:
+ this.$ = $$[$0-1]; $$[$0-1].push($$[$0]) 
+break;
+case 7:
+ this.$ = [$$[$0]]; 
+break;
+case 8:
+ this.$ = new ReglaLexica($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+break;
+case 9: case 10: case 17:
+ this.$ = $$[$0] 
+break;
+case 11:
+ $$[$0-1].agregarExpresion($$[$0]); this.$ = $$[$0-1] 
+break;
+case 12:
+ this.$ = new Concatenacion($$[$0-1], $$[$0]) 
+break;
+case 14:
+ this.$ = new Kleene($$[$0-1]) 
+break;
+case 15:
+ this.$ = new Positiva($$[$0-1]) 
+break;
+case 16:
+ this.$ = new Opcional($$[$0-1]) 
+break;
+case 18:
+ this.$ = new Cadena($$[$0]) 
+break;
+case 19: case 20:
+ this.$ = new Secuencia($$[$0]) 
+break;
+case 21:
+ this.$ = new IdentiExpresion($$[$01], _$[$01].first_line, _$[$01].first_column) 
+break;
+case 23: case 27: case 31: case 34:
+ this.$ = [$$[$0]] 
+break;
+case 24:
+ this.$ = new NoTerminal($$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column) 
+break;
+case 25:
+ this.$ = new Inicial($$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column) 
+break;
+case 28:
+ this.$ = new Produccion($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+break;
+case 29:
+ this.$ = $$[$0-2]; $$[$0-2].push($$[$0]) 
+break;
+case 30:
+ this.$ = $$[$0-1]; $$[$0-1].push([]) 
+break;
+case 32:
+ this.$ = [[]] 
+break;
+case 35:
+ this.$ = new Simbolo($$[$0], _$[$0].first_line, _$[$0].first_column, false) 
+break;
+case 36:
+ this.$ = new Simbolo($$[$0], _$[$0].first_line, _$[$0].first_column, true) 
+break;
 }
 },
-table: [{3:1,4:2,6:[1,3]},{1:[3]},{5:[1,4]},{7:[1,5]},{1:[2,1]},{8:6,11:[1,7]},{9:8,15:[1,9]},{12:[1,10]},{10:[1,11]},{16:[1,12]},{13:13,22:14,23:$V0},{6:[1,16]},{17:17,19:18,40:19,41:$V1},{14:[1,21],22:22,23:$V0},o($V2,[2,7]),{24:[1,23]},{5:[2,2]},{18:[1,24]},{20:25,40:26,41:$V1,43:[1,27]},o($V3,[2,23]),{42:[1,28]},{15:[2,3]},o($V2,[2,6]),{25:[1,29]},{10:[2,4]},{21:30,42:$V4,44:31},o($V3,[2,22]),{42:[1,33]},{27:[1,34]},{26:35,28:36,29:37,30:39,31:$V5,33:38,37:$V6,38:$V7,39:$V8},{18:[2,5],42:$V4,44:44},o($V9,[2,27]),{45:[1,45]},{27:[1,46]},o($V3,[2,24]),{27:[1,47]},{27:[2,9]},{27:[2,10],30:48,31:$V5},o($Va,[2,18],{34:[1,49],35:[1,50],36:[1,51]}),o($Vb,[2,12]),o($Vc,[2,19]),o($Vc,[2,20]),o($Vc,[2,21]),{24:[1,53],28:52,33:38,37:$V6,38:$V7,39:$V8},o($V9,[2,26]),o($Vd,[2,31],{46:54,48:55,24:$Ve,42:$Vf,49:$Vg}),{42:[2,25]},o($V2,[2,8]),o($Vb,[2,11]),o($Va,[2,15]),o($Va,[2,16]),o($Va,[2,17]),{32:[1,59]},{32:[1,60]},{27:[1,61],47:[1,62]},o($Vd,[2,30],{49:$Vh}),o($Vi,[2,33]),o($Vi,[2,34]),o($Vi,[2,35]),o($Vb,[2,13]),o($Vb,[2,14]),o($V9,[2,28]),{24:$Ve,42:$Vf,48:64,49:$Vg},o($Vi,[2,32]),o($Vd,[2,29],{49:$Vh})],
-defaultActions: {4:[2,1],16:[2,2],21:[2,3],24:[2,4],36:[2,9],46:[2,25]},
+table: [{3:1,4:2,6:[1,3]},{1:[3]},{5:[1,4]},{7:[1,5]},{1:[2,1]},{8:6,11:[1,7]},{9:8,15:[1,9]},{12:[1,10]},{10:[1,11]},{16:[1,12]},{13:13,22:14,23:$V0},{6:[1,16]},{17:17,19:18,40:19,41:$V1},{14:[1,21],22:22,23:$V0},o($V2,[2,7]),{24:[1,23]},{5:[2,2]},{18:[1,24]},{20:25,40:26,41:$V1,43:[1,27]},o($V3,[2,23]),{42:[1,28]},{15:[2,3]},o($V2,[2,6]),{25:[1,29]},{10:[2,4]},{21:30,42:$V4,44:31},o($V3,[2,22]),{42:[1,33]},{27:[1,34]},{24:$V5,26:35,28:36,29:37,30:39,31:$V6,33:38,37:$V7,38:$V8,39:$V9},{18:[2,5],42:$V4,44:45},o($Va,[2,27]),{45:[1,46]},{27:[1,47]},o($V3,[2,24]),{27:[1,48]},{27:[2,9]},{27:[2,10],30:49,31:$V6},o($Vb,[2,17],{34:[1,50],35:[1,51],36:[1,52]}),{30:53,31:$V6},o($Vc,[2,18]),o($Vc,[2,19]),o($Vc,[2,20]),o($Vc,[2,21]),{24:$V5,28:54,33:38,37:$V7,38:$V8,39:$V9},o($Va,[2,26]),o($Vd,[2,32],{46:55,48:56,49:57,24:$Ve,42:$Vf}),{42:[2,25]},o($V2,[2,8]),o($Vg,[2,11]),o($Vb,[2,14]),o($Vb,[2,15]),o($Vb,[2,16]),o($Vg,[2,12]),{32:[1,60]},{27:[1,61],47:[1,62]},o($Vd,[2,31],{49:63,24:$Ve,42:$Vf}),o($Vh,[2,34]),o($Vh,[2,35]),o($Vh,[2,36]),o($Vg,[2,13]),o($Va,[2,28]),o($Vd,[2,30],{49:57,48:64,24:$Ve,42:$Vf}),o($Vh,[2,33]),o($Vd,[2,29],{49:63,24:$Ve,42:$Vf})],
+defaultActions: {4:[2,1],16:[2,2],21:[2,3],24:[2,4],36:[2,9],47:[2,25]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -235,6 +310,21 @@ parse: function parse(input) {
     return true;
 }};
 
+    const { Cadena } = require('../backend/lexer/Cadena');
+    const { Secuencia } = require('../backend/lexer/Secuencia')
+    const { Kleene } = require('../backend/lexer/unarios/Kleene');
+    const { Opcional } = require('../backend/lexer/unarios/Opcional');
+    const { Positiva } = require('../backend/lexer/unarios/Positiva');
+    const { IdentiExpresion } = require('../backend/lexer/IdentiExpresion');
+    const { Concatenacion } = require('../backend/lexer/Concatenacion');
+    const { ReglaLexica } = require('../backend/lexer/ReglaLexica');
+    const { Creador } = require('../backend/CreadorGramatica/Creador');
+    const { Simbolo } = require('../backend/syntax/Simbolo')
+    const { NoTerminal } = require('../backend/syntax/NoTerminal')
+    const { Inicial } = require('../backend/syntax/Inicial')
+    const { Produccion } = require('../backend/syntax/Produccion')
+    const { Syntax } = require('../backend/syntax/Syntax')
+
     function errorLexico(){
         yy.errores.push(
             {
@@ -273,7 +363,7 @@ parse: function parse(input) {
             case "TERMINAL_NOMBRE": return "$_NOMBRE";
             case "NO_TERMINAL_NOMBRE": return "%_NOMBRE";
             case "CADENA": return "palabra reservada";
-            case "LETRAS": return "[aA-zZ]";
+            case "LETRAS": return "[a-zA-Z]";
             case "DIGITOS": return "[0-9]";
             default: return token;
         }
@@ -640,60 +730,12 @@ case 6:return 24
 break;
 case 7:return 25
 break;
-case 8:return 37
-break;
-case 9:return 38
-break;
-case 10:return 39
-break;
-case 11:return 34
-break;
-case 12:return 35
-break;
-case 13:return 36
-break;
-case 14:return 31
-break;
-case 15:return 32
-break;
-case 16:return 27
-break;
-case 17:return 6
-break;
-case 18:return 7
-break;
-case 19:return 10
-break;
-case 20:return 11
-break;
-case 21:return 15
-break;
-case 22:this.begin('SYNTAX'); return 16
-break;
-case 23:this.begin('INITIAL'); return 18
-break;
-case 24:this.begin('LEX'); return 12
-break;
-case 25:this.begin('INITIAL'); return 14
-break;
-case 26:return 41
-break;
-case 27:return 43
-break;
-case 28:return 45
-break;
-case 29:return 42
-break;
-case 30:return 47
-break;
-case 31:return 5
-break;
-case 32:errorLexico()
+case 8:errorLexico()
 break;
 }
 },
-rules: [/^(?:([ \t\r\n]+))/,/^(?:#.*)/,/^(?:\/\*\*)/,/^(?:\*\/)/,/^(?:(.|\n))/,/^(?:Terminal\b)/,/^(?:\$_([a-zA-Z][a-zA-Z0-9_]*))/,/^(?:<-)/,/^(?:\[\^ \\t\\r\\n\]\+)/,/^(?:\[a-zA-Z\])/,/^(?:\[0-9\])/,/^(?:\*)/,/^(?:\+)/,/^(?:\?)/,/^(?:\()/,/^(?:\))/,/^(?:;)/,/^(?:Wison\b)/,/^(?:¿)/,/^(?:\?)/,/^(?:Lex\b)/,/^(?:Syntax\b)/,/^(?:\{\{:)/,/^(?::\}\})/,/^(?:\{:)/,/^(?::\})/,/^(?:No_Terminal\b)/,/^(?:Initial_Sim\b)/,/^(?:<=)/,/^(?:%_([a-zA-Z][a-zA-Z0-9_]*))/,/^(?:\|)/,/^(?:$)/,/^(?:.)/],
-conditions: {"SYNTAX":{"rules":[1,2,16,26,27,28,29,30],"inclusive":false},"LEX":{"rules":[1,2,5,6,7,8,9,10,11,12,13,14,15,16],"inclusive":false},"COMENTARIO":{"rules":[3,4],"inclusive":false},"INITIAL":{"rules":[0,1,2,17,18,19,20,21,22,23,24,25,31,32],"inclusive":true}}
+rules: [/^(?:([ \t\r\n]+))/,/^(?:#.*)/,/^(?:\/\*\*)/,/^(?:\*\/)/,/^(?:(.|\n))/,/^(?:Terminal\b)/,/^(?:\$_([a-zA-Z][a-zA-Z0-9_]*))/,/^(?:<-)/,/^(?:\[\^ \\t\\r\\n+                         return CADENA\n<LEX>"\[a-zA-Z\]"                            return LETRAS\n<LEX>"\[0-9\]"                               return DIGITOS\n<LEX>\\\*                                    return KLEENE\n<LEX>\\\+                                    return POSITIVO\n<LEX>\\\?                                    return OPCIONAL\n<LEX>\\\(                                    return PAREN_IZQ\n<LEX>\\\)                                    return PAREN_DER\n<LEX,SYNTAX>";"                            return P_COMA\n"Wison"                                    return WISON\n"¿"                                        return APERTURA\n"\?"                                        return CIERRE\n"Lex"                                      return LEX\n"Syntax"                                   return SYNTAX\n"\{\{:"                                      this\.begin\(SYNTAX\); return IN_SYNTAX\n":\}\}"                                      this\.begin\(INITIAL\); return FIN_SYNTAX\n"\{:"                                       this\.begin\(LEX\); return IN_LEX\n":\}"                                       this\.begin\(INITIAL\); return FIN_LEX\n<SYNTAX>"No_Terminal"                      return NO_TERMINAL\n<SYNTAX>"Initial_Sim"                      return INICIO\n<SYNTAX>"<="                               return ASIGNACION\n<SYNTAX>"%_"\{IDENTIFICADOR\}                return NO_TERMINAL_NOMBRE\n<SYNTAX>"\|"                                return OR\n<<EOF>>                                    return EOF.)/],
+conditions: {"SYNTAX":{"rules":[1,2],"inclusive":false},"LEX":{"rules":[1,2,5,6,7,8],"inclusive":false},"COMENTARIO":{"rules":[3,4],"inclusive":false},"INITIAL":{"rules":[0,1,2],"inclusive":true}}
 });
 return lexer;
 })();

@@ -1,4 +1,19 @@
 %{
+    const { Cadena } = require('../backend/lexer/Cadena');
+    const { Secuencia } = require('../backend/lexer/Secuencia')
+    const { Kleene } = require('../backend/lexer/unarios/Kleene');
+    const { Opcional } = require('../backend/lexer/unarios/Opcional');
+    const { Positiva } = require('../backend/lexer/unarios/Positiva');
+    const { IdentiExpresion } = require('../backend/lexer/IdentiExpresion');
+    const { Concatenacion } = require('../backend/lexer/Concatenacion');
+    const { ReglaLexica } = require('../backend/lexer/ReglaLexica');
+    const { Creador } = require('../backend/CreadorGramatica/Creador');
+    const { Simbolo } = require('../backend/syntax/Simbolo')
+    const { NoTerminal } = require('../backend/syntax/NoTerminal')
+    const { Inicial } = require('../backend/syntax/Inicial')
+    const { Produccion } = require('../backend/syntax/Produccion')
+    const { Syntax } = require('../backend/syntax/Syntax')
+
     function errorLexico(){
         yy.errores.push(
             {
@@ -37,7 +52,7 @@
             case "TERMINAL_NOMBRE": return "$_NOMBRE";
             case "NO_TERMINAL_NOMBRE": return "%_NOMBRE";
             case "CADENA": return "palabra reservada";
-            case "LETRAS": return "[aA-zZ]";
+            case "LETRAS": return "[a-zA-Z]";
             case "DIGITOS": return "[0-9]";
             default: return token;
         }
@@ -83,7 +98,7 @@ WHITESPACE [ \t\r\n]+
 <LEX>"Terminal"                            return 'TERMINAL'
 <LEX>\$_{IDENTIFICADOR}                    return 'TERMINAL_NOMBRE'
 <LEX>"<-"                                  return 'FLECHA'
-<LEX>'[^ \t\r\n]+'                         return 'CADENA'
+<LEX>'[^ \t\r\n']+'                         return 'CADENA'
 <LEX>"[a-zA-Z]"                            return 'LETRAS'
 <LEX>"[0-9]"                               return 'DIGITOS'
 <LEX>\*                                    return 'KLEENE'
@@ -91,7 +106,7 @@ WHITESPACE [ \t\r\n]+
 <LEX>\?                                    return 'OPCIONAL'
 <LEX>\(                                    return 'PAREN_IZQ'
 <LEX>\)                                    return 'PAREN_DER'
-<LEX,SYNTAX>";"                           return 'P_COMA'
+<LEX,SYNTAX>";"                            return 'P_COMA'
 "Wison"                                    return 'WISON'
 "¿"                                        return 'APERTURA'
 "?"                                        return 'CIERRE'
@@ -113,77 +128,82 @@ WHITESPACE [ \t\r\n]+
 %start analizador
 %%
 
-analizador : wison EOF
+analizador : wison EOF                              { $$ = $1; }
     ;
 
-wison : WISON APERTURA lexico sintactico CIERRE WISON
+wison : WISON APERTURA lexico sintactico 
+    CIERRE WISON                                    { $$ = new Creador($3, $4) }
     ;
 
-lexico : LEX IN_LEX reglas_lexicas FIN_LEX
+lexico : LEX IN_LEX reglas_lexicas FIN_LEX          { $$ = $3 }
     ;
 
-sintactico : SYNTAX IN_SYNTAX syntax FIN_SYNTAX
+sintactico : SYNTAX IN_SYNTAX syntax FIN_SYNTAX     { $$ = $3 }
     ;
 
-syntax : no_terminales inicio producciones
+syntax : no_terminales inicio producciones          { $$ = new Syntax($1, $2, $3) }
     ;
 
-reglas_lexicas : reglas_lexicas regla_lexica
-    | regla_lexica
+reglas_lexicas : reglas_lexicas regla_lexica        { $$ = $1; $1.push($2) }
+    | regla_lexica                                  { $$ = [$1]; }
     ;
 
-regla_lexica : TERMINAL TERMINAL_NOMBRE FLECHA expr P_COMA
+regla_lexica : TERMINAL TERMINAL_NOMBRE 
+    FLECHA expr P_COMA                              { $$ = new ReglaLexica($2, $4, @2.first_line, @2.first_column) }
     ;
 
-expr : unario
-    | combinado
+expr : unario                                       { $$ = $1 }
+    | combinado                                     { $$ = $1 }
     ;
 
-combinado : combinado concatenacion
-    | concatenacion
+combinado : combinado concatenacion                 { $1.agregarExpresion($2); $$ = $1 }
+    | concatenacion concatenacion                   { $$ = new Concatenacion($1, $2) }
     ;
 
-concatenacion : PAREN_IZQ unario PAREN_DER
-    | PAREN_IZQ TERMINAL_NOMBRE PAREN_DER
+concatenacion : PAREN_IZQ unario PAREN_DER          { $$ = $2 }
     ;
 
-unario : simple KLEENE
-    | simple POSITIVO
-    | simple OPCIONAL
-    | simple
+unario : simple KLEENE                              { $$ = new Kleene($1) }
+    | simple POSITIVO                               { $$ = new Positiva($1) }
+    | simple OPCIONAL                               { $$ = new Opcional($1) }
+    | simple                                        { $$ = $1 }
     ;
 
-simple : CADENA
-    | LETRAS
-    | DIGITOS
+simple : CADENA                                     { $$ = new Cadena($1) }
+    | LETRAS                                        { $$ = new Secuencia($1) }
+    | DIGITOS                                       { $$ = new Secuencia($1) }
+    | TERMINAL_NOMBRE                               { $$ = new IdentiExpresion($2, @2.first_line, @2.first_column) }
     ;
 
-no_terminales : no_terminales no_terminal
-    | no_terminal
+no_terminales : no_terminales no_terminal           { $$ = $1; $1.push($2) }
+    | no_terminal                                   { $$ = [$1] }
     ;
 
-no_terminal : NO_TERMINAL NO_TERMINAL_NOMBRE P_COMA
+no_terminal : NO_TERMINAL 
+    NO_TERMINAL_NOMBRE P_COMA                       { $$ = new NoTerminal($2, @2.first_line, @2.first_column) }
     ;
 
-inicio : INICIO NO_TERMINAL_NOMBRE P_COMA
+inicio : INICIO NO_TERMINAL_NOMBRE P_COMA           { $$ = new Inicial($2, @2.first_line, @2.first_column) }
     ;
 
-producciones : producciones produccion
-    | produccion
+producciones : producciones produccion              { $$ = $1; $1.push($2) }
+    | produccion                                    { $$ = [$1] }
     ;
 
-produccion : NO_TERMINAL_NOMBRE ASIGNACION reglas P_COMA
+produccion : NO_TERMINAL_NOMBRE 
+    ASIGNACION reglas P_COMA                        { $$ = new Produccion($1, $3, @1.first_line, @1.first_column) }
     ;
 
-reglas : reglas OR estructura
-    | estructura
-    |
+reglas : reglas OR listaSimbolos                    { $$ = $1; $1.push($3) }
+    | reglas OR                                     { $$ = $1; $1.push([]) }
+    | listaSimbolos                                 { $$ = [$1] }
+    |                                               { $$ = [[]] }
     ;
 
-estructura : estructura simbolo 
-    | simbolo
+listaSimbolos : listaSimbolos simbolo               { $$ = $1; $1.push($2) }
+    | simbolo                                       { $$ = [$1] }
     ;
 
-estructura : NO_TERMINAL_NOMBRE
-    | TERMINAL_NOMBRE
+simbolo : NO_TERMINAL_NOMBRE                        { $$ = new Simbolo($1, @1.first_line, @1.first_column, false) }
+    | TERMINAL_NOMBRE                               { $$ = new Simbolo($1, @1.first_line, @1.first_column, true) }
     ;
