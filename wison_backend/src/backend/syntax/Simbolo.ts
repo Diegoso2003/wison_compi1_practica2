@@ -1,8 +1,12 @@
+import { NoTerminal } from "./NoTerminal";
+
 export class Simbolo {
   private nombre: string;
   private linea: number;
   private columna: number;
   private terminal: boolean;
+  private noTerminal: NoTerminal | undefined;
+  public error: boolean = false;
 
   constructor(
     nombre: string,
@@ -30,5 +34,19 @@ export class Simbolo {
 
   public getTerminal(): boolean {
     return this.terminal;
+  }
+
+  public getNoTerminal(): NoTerminal | undefined {
+    return this.noTerminal;
+  }
+  public setNoTerminal(value: NoTerminal | undefined) {
+    this.noTerminal = value;
+  }
+
+  public getError(): boolean {
+    return this.error;
+  }
+  public setError(value: boolean) {
+    this.error = value;
   }
 }

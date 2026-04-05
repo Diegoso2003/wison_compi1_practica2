@@ -1,15 +1,16 @@
+import { Creador } from "./CreadorGramatica/Creador";
 import { MensajeError } from "./MensajeError";
 
 const parser = require('../analizador/wison.js');
 
 export class Analizador {
     
-    private errores: MensajeError[] = []
+    private creador: Creador = new Creador()
 
     analizar(input: string): any {
         try {
             parser.yy = {
-                errores: this.errores
+                creador: this.creador
             };
 
             if(input.length === 0){
@@ -49,10 +50,6 @@ export class Analizador {
                 }]
             };
         }
-    }
-
-    public getErrores(): MensajeError[]{
-        return this.errores
     }
 
 }

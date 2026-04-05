@@ -13,9 +13,10 @@
     const { Inicial } = require('../backend/syntax/Inicial')
     const { Produccion } = require('../backend/syntax/Produccion')
     const { Syntax } = require('../backend/syntax/Syntax')
+    const { ListaSimbolos } = require('../backend/syntax/ListaSimbolos')
 
     function errorLexico(){
-        yy.errores.push(
+        yy.creador.getErrores().push(
             {
                 tipo: "Lexico",
                 lexema: yytext,
@@ -67,7 +68,7 @@
     }
 
     parser.parseError = function (str, hash) {
-        yy.errores.push({
+        yy.creador.getErrores().push({
             tipo: "Sintactico",
             lexema: hash.text || "",
             linea: hash.loc?.first_line || 0,
@@ -96,7 +97,7 @@ WHITESPACE [ \t\r\n]+
 <COMENTARIO>\*\/                           this.popState()  /* Finalizar comentario de varias líneas */
 <COMENTARIO>(.|\n)                         /* Ignorar el contenido del comentario */
 <LEX>"Terminal"                            return 'TERMINAL'
-<LEX>\$_{I @$.first_line, @$.first_column, trueDENTIFICADOR}                    return 'TERMINAL_NOMBRE'
+<LEX>\$_{IDENTIFICADOR}                    return 'TERMINAL_NOMBRE'
 <LEX>"<-"                                  return 'FLECHA'
 <LEX>'[^ \t\r\n']+'                        return 'CADENA'
 <LEX>"[a-zA-Z]"                            return 'LETRAS'
@@ -119,7 +120,7 @@ WHITESPACE [ \t\r\n]+
 <SYNTAX>"No_Terminal"                      return 'NO_TERMINAL'
 <SYNTAX>"Initial_Sim"                      return 'INICIO'
 <SYNTAX>"<="                               return 'ASIGNACION'
-<SYNTAX>"%_"{ @$.first_line, @$.first_column, trueIDENTIFICADOR}                return 'NO_TERMINAL_NOMBRE'
+<SYNTAX>"%_"{IDENTIFICADOR}                return 'NO_TERMINAL_NOMBRE'
 <SYNTAX>"|"                                return 'OR'
 <<EOF>>                                    return 'EOF'
 .                                          errorLexico()
@@ -128,11 +129,11 @@ WHITESPACE [ \t\r\n]+
 %start analizador
 %%
 
-analizador : wison EOF                              { $$ = $1; }
+analizador : wison EOF                              
     ;
 
 wison : WISON APERTURA lexico sintactico 
-    CIERRE WISON                                    { $$ = new Creador($3, $4) }
+    CIERRE WISON                                    
     ;
 
 lexico : LEX IN_LEX reglas_lexicas FIN_LEX          { $$ = $3 }
@@ -141,15 +142,17 @@ lexico : LEX IN_LEX reglas_lexicas FIN_LEX          { $$ = $3 }
 sintactico : SYNTAX IN_SYNTAX syntax FIN_SYNTAX     { $$ = $3 }
     ;
 
-syntax : no_terminales inicio producciones          { $$ = new Syntax($1, $2, $3) }
+syntax : no_terminales inicio producciones          { $$ = new Syntax($2, $3) }
     ;
 
-reglas_lexicas : reglas_lexicas regla_lexica        { $$ = $1; $1.push($2) }
-    | regla_lexica                                  { $$ = [$1]; }
+reglas_lexicas : reglas_lexicas regla_lexica        
+    | regla_lexica                                  
     ;
 
 regla_lexica : TERMINAL TERMINAL_NOMBRE 
-    FLECHA expr P_COMA                              { $$ = new ReglaLexica($2, $4, @2.first_line, @2.first_column) }
+    FLECHA expr P_COMA                              {{ 
+            yy.creador.agregarReglaLexica(new ReglaLexica($2, $4, @2.first_line, @2.first_column)) 
+                                                    }}
     ;
 
 expr : unario                                       { $$ = $1 }
@@ -175,12 +178,14 @@ simple : CADENA                                     { $$ = new Cadena($1) }
     | TERMINAL_NOMBRE                               { $$ = new IdentiExpresion($2, @2.first_line, @2.first_column) }
     ;
 
-no_terminales : no_terminales no_terminal           { $$ = $1; $1.push($2) }
-    | no_terminal                                   { $$ = [$1] }
+no_terminales : no_terminales no_terminal           
+    | no_terminal                                   
     ;
 
 no_terminal : NO_TERMINAL 
-    NO_TERMINAL_NOMBRE P_COMA                       { $$ = new NoTerminal($2, @2.first_line, @2.first_column) }
+    NO_TERMINAL_NOMBRE P_COMA                       {{ 
+                                        yy.creador.agregarNoTerminal(new NoTerminal($2, @2.first_line, @2.first_column))
+                                                    }}
     ;
 
 inicio : INICIO NO_TERMINAL_NOMBRE P_COMA           { $$ = new Inicial($2, @2.first_line, @2.first_column) }
@@ -197,7 +202,7 @@ produccion : NO_TERMINAL_NOMBRE
 reglas : reglas OR listaSimbolos                    { $$ = $1; $1.push($3) }
     | reglas OR                                     { $$ = $1; $1.push([new Simbolo("", @$.first_line, @$.first_column, true)]) }
     | listaSimbolos                                 { $$ = [$1] }
-    |                                               { $$ = [[new Simbolo("", @$.first_line, @$.first_column, true)]] }
+    |                                               {[] $$ = [[new Simbolo("", @$.first_line, @$.first_column, true)]] }
     ;
 
 listaSimbolos : listaSimbolos simbolo               { $$ = $1; $1.push($2) }
