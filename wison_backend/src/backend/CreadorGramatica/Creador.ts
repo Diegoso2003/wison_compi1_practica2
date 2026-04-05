@@ -20,6 +20,7 @@ export class Creador {
   analizar(errores: MensajeError[]): void {
     this.errores = errores;
     this.validarLexer()
+    this.syntax.validarGramatica(this)
   }
 
   validarLexer(): void{

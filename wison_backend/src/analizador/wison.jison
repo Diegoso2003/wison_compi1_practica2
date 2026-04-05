@@ -96,9 +96,9 @@ WHITESPACE [ \t\r\n]+
 <COMENTARIO>\*\/                           this.popState()  /* Finalizar comentario de varias líneas */
 <COMENTARIO>(.|\n)                         /* Ignorar el contenido del comentario */
 <LEX>"Terminal"                            return 'TERMINAL'
-<LEX>\$_{IDENTIFICADOR}                    return 'TERMINAL_NOMBRE'
+<LEX>\$_{I @$.first_line, @$.first_column, trueDENTIFICADOR}                    return 'TERMINAL_NOMBRE'
 <LEX>"<-"                                  return 'FLECHA'
-<LEX>'[^ \t\r\n']+'                         return 'CADENA'
+<LEX>'[^ \t\r\n']+'                        return 'CADENA'
 <LEX>"[a-zA-Z]"                            return 'LETRAS'
 <LEX>"[0-9]"                               return 'DIGITOS'
 <LEX>\*                                    return 'KLEENE'
@@ -119,7 +119,7 @@ WHITESPACE [ \t\r\n]+
 <SYNTAX>"No_Terminal"                      return 'NO_TERMINAL'
 <SYNTAX>"Initial_Sim"                      return 'INICIO'
 <SYNTAX>"<="                               return 'ASIGNACION'
-<SYNTAX>"%_"{IDENTIFICADOR}                return 'NO_TERMINAL_NOMBRE'
+<SYNTAX>"%_"{ @$.first_line, @$.first_column, trueIDENTIFICADOR}                return 'NO_TERMINAL_NOMBRE'
 <SYNTAX>"|"                                return 'OR'
 <<EOF>>                                    return 'EOF'
 .                                          errorLexico()
@@ -195,9 +195,9 @@ produccion : NO_TERMINAL_NOMBRE
     ;
 
 reglas : reglas OR listaSimbolos                    { $$ = $1; $1.push($3) }
-    | reglas OR                                     { $$ = $1; $1.push([]) }
+    | reglas OR                                     { $$ = $1; $1.push([new Simbolo("", @$.first_line, @$.first_column, true)]) }
     | listaSimbolos                                 { $$ = [$1] }
-    |                                               { $$ = [[]] }
+    |                                               { $$ = [[new Simbolo("", @$.first_line, @$.first_column, true)]] }
     ;
 
 listaSimbolos : listaSimbolos simbolo               { $$ = $1; $1.push($2) }
