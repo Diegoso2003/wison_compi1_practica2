@@ -71,12 +71,18 @@ export class NoTerminal {
     this.hijos.add(hijo);
   }
 
-  public encontrarPrimeros(creador: Creador): void {
-    this.contadorPrimeros = 0
-    this.encontrarPrimerosRecursivo(creador);
+  public encontrarPrimeros(
+    creador: Creador,
+    tablaNoTerminales: Map<string, NoTerminal>,
+  ): void {
+    this.contadorPrimeros = 0;
+    this.encontrarPrimerosRecursivo(creador, tablaNoTerminales);
   }
 
-  private encontrarPrimerosRecursivo(creador: Creador): Map<string, string[]> {
+  private encontrarPrimerosRecursivo(
+    creador: Creador,
+    tablaNoTerminales: Map<string, NoTerminal>,
+  ): Map<string, string[]> {
     if (this.contadorPrimeros > 0) {
       creador.getErrores().push({
         tipo: "Semantico",
@@ -84,19 +90,23 @@ export class NoTerminal {
         columna: this.columna,
         lexema: this.nombre,
         descripcion:
-          "El no terminal tiene recursividad por la izquierda por lo que no es apto para LL(1).",
+          "El no terminal tiene recursividad directa o indirecta por la izquierda por lo que no es apto para LL(1).",
       });
       return this.primeros;
     }
     this.contadorPrimeros++;
     this.primerosSimbolos.forEach((produccion, simbolo) => {
-      let primeros: Map<string, string[]> =
-        simbolo.encontrarPrimerosRecursivo(creador);
-        this.contadorPrimeros = 0;
-        let cadena: string[]= []
+      let primeros: Map<string, string[]> = simbolo.encontrarPrimerosRecursivo(
+        creador,
+        tablaNoTerminales,
+      );
+      this.contadorPrimeros = 0;
+      let cadena: string[] = [];
       primeros.forEach((producciones, terminal) => {
         if (!this.primeros.has(terminal)) {
-          produccion.forEach((simbolo) => {cadena.push(simbolo.getNombre())})
+          produccion.forEach((simbolo) => {
+            cadena.push(simbolo.getNombre());
+          });
           this.primeros.set(terminal, cadena);
         } else {
           creador.getErrores().push({
@@ -105,20 +115,63 @@ export class NoTerminal {
             columna: simbolo.columna,
             lexema: simbolo.nombre,
             descripcion: `Conflicto entre:
-                    ${this.nombre} <= ${produccion.join(" ")};
+                    ${this.nombre} <= ${cadena.join(" ")};
                     ${simbolo.nombre} <= ${producciones.join(" ")};`,
           });
         }
-        if (simbolo.primerVacios.length > 0) {
-          let otro: Simbolo = new Simbolo(
-            simbolo.nombre,
-            simbolo.linea,
-            simbolo.columna,
-            true,
-          );
-          this.agregarProduccionVacio(cadena, creador, otro);
-        }
       });
+      if (simbolo.primerVacios.length > 0) {
+        let buscar = true;
+        for (let i = 1; i<produccion.length && buscar; i++) {
+          if (produccion[i]!.getTerminal()) {
+            if (this.primeros.has(produccion[i]!.getNombre())) {
+              creador.getErrores().push({
+                tipo: "Semantico",
+                linea: simbolo.linea,
+                columna: simbolo.columna,
+                lexema: simbolo.nombre,
+                descripcion: `Conflicto entre:
+                    ${this.nombre} <= ${produccion.join(" ")};
+                    ${this.nombre} <= ${cadena.join(" ")};`,
+              });
+            } else {
+              this.primeros.set(simbolo.getNombre(), cadena);
+            }
+            buscar = false;
+          } else {
+            if (
+              this.existeNoTerminal(creador, produccion[i]!, tablaNoTerminales)
+            ) {
+              let noT: NoTerminal = tablaNoTerminales.get(
+                produccion[i]!.getNombre(),
+              )!;
+              noT.contadorPrimeros = 0;
+              let primerosOtros = noT.encontrarPrimerosRecursivo(
+                creador,
+                tablaNoTerminales,
+              );
+              primerosOtros.forEach((produccion2, interes) => {
+                if (this.primeros.has(interes)) {
+                  creador.getErrores().push({
+                    tipo: "Semantico",
+                    linea: simbolo.linea,
+                    columna: simbolo.columna,
+                    lexema: simbolo.nombre,
+                    descripcion: `Conflicto entre:
+                    ${this.nombre} <= ${cadena.join(" ")};
+                    ${produccion[i]!.getNombre()} <= ${produccion2.join(" ")};`,
+                  });
+                } else {
+                  this.primeros.set(interes, cadena)
+                  buscar = noT.primerVacios.length > 0
+                }
+              });
+            } else {
+              buscar = false;
+            }
+          }
+        }
+      }
     });
     this.primerosSimbolos.clear();
     return this.primeros;
@@ -130,6 +183,23 @@ export class NoTerminal {
 
   public agregarProduccionesVacias(creador: Creador): void {
     this.calcularSegundosHijosRecursivo();
+    if(this.primerVacios.length > 0){
+      this.segundos.forEach((segundo) => {
+        if(!this.primeros.has(segundo)){
+          this.primeros.set(segundo, this.primerVacios)
+        } else {
+          creador.getErrores().push({
+            tipo: "Semantico",
+            linea: this.linea,
+            columna: this.columna,
+            lexema: this.nombre,
+            descripcion: `Conflicto entre: 
+            ${this.nombre} <= ${this.primeros.get(segundo)!.join(" ")}
+            ${this.nombre} <= ${this.primerVacios.join(" ")}`
+          })
+        }
+      })
+    }
   }
 
   private calcularSegundosHijosRecursivo(): void {
@@ -147,5 +217,23 @@ export class NoTerminal {
         hijo.calcularSegundosHijosRecursivo();
       }
     });
+  }
+
+  public existeNoTerminal(
+    creador: Creador,
+    simbolo: Simbolo,
+    tablaNoTerminales: Map<string, NoTerminal>,
+  ): boolean {
+    if (tablaNoTerminales.has(simbolo.getNombre())) {
+      return true;
+    }
+    creador.getErrores().push({
+      tipo: "Semantico",
+      linea: simbolo.getLinea(),
+      columna: simbolo.getColumna(),
+      lexema: simbolo.getNombre(),
+      descripcion: `El no terminal con nombre: ${simbolo.getNombre()} no ha sido declarado`,
+    });
+    return false;
   }
 }

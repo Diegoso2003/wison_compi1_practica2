@@ -1,0 +1,49 @@
+<ng-template #modalError>
+    <div class="custom-modal">
+
+        <!-- HEADER -->
+        <div class="modal-header">
+            <h4 class="modal-title">Errores encontrados</h4>
+            <button type="button" class="btn-close" aria-label="Close" (click)="cerrar()"></button>
+        </div>
+
+        <!-- BODY -->
+        <div class="modal-body">
+
+            <div class="table-container">
+                <table class="error-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Línea</th>
+                            <th>Columna</th>
+                            <th>Lexema</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @for (error of informacion.getErrores(); track error) {
+                        <tr>
+                            <td>{{ error.tipo }}</td>
+                            <td>{{ error.linea }}</td>
+                            <td>{{ error.columna }}</td>
+                            <td>{{ error.lexema }}</td>
+                            <td>{{ error.descripcion }}</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="modal-footer">
+            <button type="button" class="btn custom-button" (click)="cerrar()">
+                Cerrar
+            </button>
+        </div>
+
+    </div>
+</ng-template>

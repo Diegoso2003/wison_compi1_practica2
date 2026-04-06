@@ -1,0 +1,52 @@
+$field-drab: #625834;
+$bright-amber: #ffc107;
+$text-contrast: #f5f5f5;
+
+.toast-container {
+    z-index: 1200;
+    position: fixed;
+    top: 0;
+    left: 75%; // Mueve el contenedor al 75% del ancho de la pantalla
+    transform: translateX(-50%); // Centra el contenedor horizontalmente respecto al 75%
+    padding: 1rem;
+  }
+  
+  ::ng-deep {
+    .toast {
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      opacity: 0.95;
+      
+      .toast-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        
+        .btn-close {
+          color: black;
+          filter: invert(1) grayscale(100%) brightness(200%);
+        }
+      }
+    }
+  }
+  ::ng-deep .toast .toast-header {
+    background-color: $bright-amber;
+    color: $text-contrast;
+  }
+  // Animación para hacer el toast más llamativo
+  @keyframes toast-pop {
+    0% {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 0.95;
+    }
+  }
+  
+  ::ng-deep .toast.show {
+    animation: toast-pop 0.3s ease-out forwards;
+  }
+
+  ::ng-deep .toast {
+    background-color: $field-drab;
+    color: $text-contrast;
+  }

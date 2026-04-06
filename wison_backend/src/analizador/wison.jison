@@ -96,7 +96,7 @@ WHITESPACE [ \t\r\n]+
 <COMENTARIO>\*\/                           this.popState()  /* Finalizar comentario de varias líneas */
 <COMENTARIO>(.|\n)                         /* Ignorar el contenido del comentario */
 <LEX>"Terminal"                            return 'TERMINAL'
-<LEX>\$_{I @$.first_line, @$.first_column, trueDENTIFICADOR}                    return 'TERMINAL_NOMBRE'
+<LEX>\$_{IDENTIFICADOR}                    return 'TERMINAL_NOMBRE'
 <LEX>"<-"                                  return 'FLECHA'
 <LEX>'[^ \t\r\n']+'                        return 'CADENA'
 <LEX>"[a-zA-Z]"                            return 'LETRAS'
@@ -119,7 +119,7 @@ WHITESPACE [ \t\r\n]+
 <SYNTAX>"No_Terminal"                      return 'NO_TERMINAL'
 <SYNTAX>"Initial_Sim"                      return 'INICIO'
 <SYNTAX>"<="                               return 'ASIGNACION'
-<SYNTAX>"%_"{ @$.first_line, @$.first_column, trueIDENTIFICADOR}                return 'NO_TERMINAL_NOMBRE'
+<SYNTAX>"%_"{IDENTIFICADOR}                return 'NO_TERMINAL_NOMBRE'
 <SYNTAX>"|"                                return 'OR'
 <<EOF>>                                    return 'EOF'
 .                                          errorLexico()
@@ -145,7 +145,9 @@ syntax : no_terminales inicio producciones          { $$ = new Syntax($1, $2, $3
     ;
 
 reglas_lexicas : reglas_lexicas regla_lexica        { $$ = $1; $1.push($2) }
+    | reglas_lexicas error                          { $$ = $1; }
     | regla_lexica                                  { $$ = [$1]; }
+    | error                                         { $$ = []; }
     ;
 
 regla_lexica : TERMINAL TERMINAL_NOMBRE 
@@ -176,7 +178,9 @@ simple : CADENA                                     { $$ = new Cadena($1) }
     ;
 
 no_terminales : no_terminales no_terminal           { $$ = $1; $1.push($2) }
+    | no_terminales error                           { $$ = $1 }
     | no_terminal                                   { $$ = [$1] }
+    | error                                         { $$ = [] }
     ;
 
 no_terminal : NO_TERMINAL 
@@ -187,7 +191,9 @@ inicio : INICIO NO_TERMINAL_NOMBRE P_COMA           { $$ = new Inicial($2, @2.fi
     ;
 
 producciones : producciones produccion              { $$ = $1; $1.push($2) }
+    | producciones error                            { $$ = $1 }
     | produccion                                    { $$ = [$1] }
+    | error                                         { $$ = [] }
     ;
 
 produccion : NO_TERMINAL_NOMBRE 

@@ -1,0 +1,21 @@
+<ng-template #modalError>
+  <div class="custom-alert">
+    <div class="modal-header">
+      <h4 class="modal-title">Error</h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="cerrar()"
+      ></button>
+    </div>
+    <div class="modal-body">
+      {{ informacion.getMensaje() }}
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn custom-button" (click)="cerrar()">
+        Cerrar
+      </button>
+    </div>
+  </div>
+</ng-template>

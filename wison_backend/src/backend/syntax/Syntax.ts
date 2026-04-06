@@ -20,7 +20,7 @@ export class Syntax{
         this.validarSimboloInicial(creador)
         this.validarProducciones(creador)
         this.tablaNoTerminales.forEach((noTerminal) => {
-            noTerminal.encontrarPrimeros(creador)
+            noTerminal.encontrarPrimeros(creador, this.tablaNoTerminales)
         })
         this.producciones.forEach((produccion) => {
             produccion.segundos(creador, this.tablaNoTerminales)

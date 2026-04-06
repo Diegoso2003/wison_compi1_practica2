@@ -1,5 +1,6 @@
 import { ReglaLexica } from "../lexer/ReglaLexica";
 import { MensajeError } from "../MensajeError";
+import { Simbolo } from "../syntax/Simbolo";
 import { Syntax } from "../syntax/Syntax";
 import { TablaSimbolos } from "../TablaSimbolos";
 
@@ -40,6 +41,20 @@ export class Creador {
         }
     }
   }
+
+    public existeTerminal(simbolo: Simbolo): boolean {
+      if (this.tabla.existeEnTabla(simbolo.getNombre())) {
+        return true;
+      }
+      this.errores.push({
+        tipo: "Semantico",
+        linea: simbolo.getLinea(),
+        columna: simbolo.getColumna(),
+        lexema: simbolo.getNombre(),
+        descripcion: `El terminal con nombre: ${simbolo.getNombre()} no ha sido declarado`,
+      });
+      return false;
+    }
 
   public getTabla(): TablaSimbolos {
     return this.tabla;

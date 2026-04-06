@@ -1,3 +1,5 @@
+import { Entrada } from "../model/Entrada";
+import { Creador } from "./CreadorGramatica/Creador";
 import { MensajeError } from "./MensajeError";
 
 const parser = require('../analizador/wison.js');
@@ -6,26 +8,30 @@ export class Analizador {
     
     private errores: MensajeError[] = []
 
-    analizar(input: string): any {
+    analizar(input: Entrada): any {
         try {
             parser.yy = {
                 errores: this.errores
             };
 
-            if(input.length === 0){
+            if(input.analizador.length === 0 || input.nombre.length === 0){
                 return {
                     ok: false,
                     errores: [{
                         lexema: "",
                         linea: 0,
                         columna: 0,
-                        descripcion: "introducir texto valido.",
+                        descripcion: "introducir informacion valida.",
                         tipo: "Fatal"
                     }]
                 };
             }
 
-            const resultado = parser.parse(input);
+            const resultado = parser.parse(input.analizador);
+            if(resultado instanceof Creador){
+                resultado.analizar(this.errores)
+                // pedir que lo guarde
+            }
             if (parser.yy.errores.length > 0) {
                 return {
                     ok: false,
@@ -33,8 +39,7 @@ export class Analizador {
                 };
             }
             return {
-                ok: true,
-                resultado
+                ok: true
             };
         } catch (error: any) {
             return {

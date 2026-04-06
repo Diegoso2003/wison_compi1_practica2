@@ -1,0 +1,7 @@
+@if(informacion.getExito()){
+<app-informe-exito></app-informe-exito>
+} @if(informacion.getHayError()){
+<app-informe-error></app-informe-error>
+} @if(informacion.getHayErrores()){
+<app-tabla-errores></app-tabla-errores>
+}
