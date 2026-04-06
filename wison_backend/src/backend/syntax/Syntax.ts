@@ -1,3 +1,6 @@
+import { NoTerminalModel } from "../../model/NoTerminalModel";
+import { Sintactico } from "../../model/Sintactico";
+import { TablaProduccion } from "../../model/TablaProduccion";
 import { Creador } from "../CreadorGramatica/Creador";
 import { Inicial } from "./Inicial";
 import { NoTerminal } from "./NoTerminal";
@@ -17,17 +20,23 @@ export class Syntax{
 
     validarGramatica(creador: Creador): void{
         this.validarNoterminales(creador)
+        console.log("no terminales validados.")
         this.validarSimboloInicial(creador)
+        console.log("inicial validado")
         this.validarProducciones(creador)
+        console.log("producciones validados")
         this.tablaNoTerminales.forEach((noTerminal) => {
             noTerminal.encontrarPrimeros(creador, this.tablaNoTerminales)
         })
+        console.log("primeros calculados.")
         this.producciones.forEach((produccion) => {
             produccion.segundos(creador, this.tablaNoTerminales)
         })
+        console.log("segundos calculados")
         this.tablaNoTerminales.forEach((noTerminal) => {
             noTerminal.agregarProduccionesVacias(creador)
         })
+        console.log("vacios añadidos")
     }
 
     private validarProducciones(creador: Creador): void{
@@ -63,6 +72,34 @@ export class Syntax{
             })
         } else {
             this.tablaNoTerminales.get(this.inicial.getNombre())!.getSegundos().add("$_EOF")
+        }
+    }
+
+    public pasarAModelo(): Sintactico {
+        let noTerminales: NoTerminalModel[] = []
+        this.tablaNoTerminales.forEach((noTerminal, nombre) => {
+            let tabla: TablaProduccion[] = []
+            let segundosArreglo: string[] = []
+            let primeros: Map<string, string[]> = noTerminal.getPrimeros()
+            primeros.forEach((produccion, terminal) => {
+                tabla.push({
+                    terminal: terminal,
+                    tabla: produccion
+                })
+            })
+            let segundos: Set<string> = noTerminal.getSegundos()
+            segundos.forEach((segundo) => {
+                segundosArreglo.push(segundo)
+            })
+            noTerminales.push({
+                nombre: nombre,
+                segundos: segundosArreglo,
+                tabla: tabla
+            })
+        })
+        return {
+            noTerminales: noTerminales,
+            inicial: this.inicial.getNombre()
         }
     }
 }

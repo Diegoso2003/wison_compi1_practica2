@@ -1,4 +1,5 @@
 export interface Entrada{
     nombre: string,
-    analizador: string
+    analizador: string,
+    id: number
 }

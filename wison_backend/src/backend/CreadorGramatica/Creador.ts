@@ -1,3 +1,6 @@
+import { Lexer } from "../../model/Lexer";
+import { ModeloGramatica } from "../../model/ModeloGramatica";
+import { Sintactico } from "../../model/Sintactico";
 import { ReglaLexica } from "../lexer/ReglaLexica";
 import { MensajeError } from "../MensajeError";
 import { Simbolo } from "../syntax/Simbolo";
@@ -21,6 +24,7 @@ export class Creador {
   analizar(errores: MensajeError[]): void {
     this.errores = errores;
     this.validarLexer()
+    console.log("lexer validado")
     this.syntax.validarGramatica(this)
   }
 
@@ -66,7 +70,13 @@ export class Creador {
   public getErrores(): MensajeError[] {
     return this.errores;
   }
-  public setErrores(value: MensajeError[]) {
-    this.errores = value;
+
+  public crearModeloGramatica(): ModeloGramatica {
+    let lexer: Lexer = this.tabla.pasarAModelo()
+    let sintactico: Sintactico = this.syntax.pasarAModelo()
+    return {
+      lexer: lexer,
+      sintactico: sintactico
+    }
   }
 }

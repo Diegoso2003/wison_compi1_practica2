@@ -1,0 +1,9 @@
+CREATE DATABASE Wison;
+
+USE Wison;
+
+CREATE TABLE Gramatica(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(255) NOT NULL,
+	gramatica JSON NOT NULL
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

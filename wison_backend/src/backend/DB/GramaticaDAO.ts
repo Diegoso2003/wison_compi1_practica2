@@ -1,13 +1,12 @@
 import { conexionDB } from "./conexionDB";
-import { ModeloGramatica } from "./ModeloGramatica";
+import { ModeloGramatica } from "../../model/ModeloGramatica";
 
 export class GramaticaDAO{
-    async crear(nuevo: ModeloGramatica): Promise<number>{
+    async crear(nuevo: ModeloGramatica, nombre: string): Promise<number>{
         const [result]: any = await conexionDB.query(
             "INSERT INTO Gramatica (nombre, gramatica) VALUES (?,?)",
-            []
+            [nombre, JSON.stringify(nuevo)]
         )
-        //data.nombre, JSON.stringif(data.gramatica)
         return result.insertId;
     }
 

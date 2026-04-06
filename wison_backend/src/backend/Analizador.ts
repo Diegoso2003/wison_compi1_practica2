@@ -1,18 +1,18 @@
 import { Entrada } from "../model/Entrada";
 import { Creador } from "./CreadorGramatica/Creador";
+import { GramaticaDAO } from "./DB/GramaticaDAO";
 import { MensajeError } from "./MensajeError";
 
 const parser = require('../analizador/wison.js');
+const gramaticaDao: GramaticaDAO = new GramaticaDAO()
 
 export class Analizador {
     
     private errores: MensajeError[] = []
 
-    analizar(input: Entrada): any {
+    async analizar(input: Entrada): Promise<any> {
         try {
-            parser.yy = {
-                errores: this.errores
-            };
+            parser.yy = { errores: [] };
 
             if(input.analizador.length === 0 || input.nombre.length === 0){
                 return {
@@ -26,11 +26,17 @@ export class Analizador {
                     }]
                 };
             }
-
+            console.log("iniciando...")
+            console.log(input.analizador)
             const resultado = parser.parse(input.analizador);
+            console.log("fin")
+            this.errores = parser.yy.errores || [];
             if(resultado instanceof Creador){
+                console.log("es valido")
                 resultado.analizar(this.errores)
-                // pedir que lo guarde
+                if(this.errores.length === 0){
+                    await gramaticaDao.crear(resultado.crearModeloGramatica(), input.nombre)
+                }
             }
             if (parser.yy.errores.length > 0) {
                 return {

@@ -15,7 +15,9 @@
     const { Syntax } = require('../backend/syntax/Syntax')
 
     function errorLexico(){
-        yy.errores.push(
+        if (!this.yy) this.yy = {};
+        if (!this.yy.errores) this.yy.errores = [];
+        this.yy.errores.push(
             {
                 tipo: "Lexico",
                 lexema: yytext,
@@ -67,7 +69,9 @@
     }
 
     parser.parseError = function (str, hash) {
-        yy.errores.push({
+        if (!this.yy) this.yy = {};
+        if (!this.yy.errores) this.yy.errores = [];
+        this.yy.errores.push({
             tipo: "Sintactico",
             lexema: hash.text || "",
             linea: hash.loc?.first_line || 0,
@@ -96,7 +100,7 @@ WHITESPACE [ \t\r\n]+
 <COMENTARIO>\*\/                           this.popState()  /* Finalizar comentario de varias líneas */
 <COMENTARIO>(.|\n)                         /* Ignorar el contenido del comentario */
 <LEX>"Terminal"                            return 'TERMINAL'
-<LEX>\$_{IDENTIFICADOR}                    return 'TERMINAL_NOMBRE'
+<LEX,SYNTAX>\$_{IDENTIFICADOR}                    return 'TERMINAL_NOMBRE'
 <LEX>"<-"                                  return 'FLECHA'
 <LEX>'[^ \t\r\n']+'                        return 'CADENA'
 <LEX>"[a-zA-Z]"                            return 'LETRAS'
@@ -132,7 +136,7 @@ analizador : wison EOF                              { $$ = $1; }
     ;
 
 wison : WISON APERTURA lexico sintactico 
-    CIERRE WISON                                    { $$ = new Creador($3, $4) }
+    CIERRE WISON                                    { $$ = new Creador($3, $4); }
     ;
 
 lexico : LEX IN_LEX reglas_lexicas FIN_LEX          { $$ = $3 }
@@ -159,7 +163,7 @@ expr : unario                                       { $$ = $1 }
     ;
 
 combinado : combinado concatenacion                 { $1.agregarExpresion($2); $$ = $1 }
-    | concatenacion concatenacion                   { $$ = new Concatenacion($1, $2) }
+    | concatenacion                                 { $$ = new Concatenacion($1) }
     ;
 
 concatenacion : PAREN_IZQ unario PAREN_DER          { $$ = $2 }

@@ -10,10 +10,10 @@ import { Resultado } from '../model/Resultado';
 export class GramaticaService {
 
   private _http = inject(HttpClient);
-  private url = 'localhost:3000/api/gramatica'
+  private url = 'http://localhost:3000/api/gramatica'
 
   crearNuevo(nuevo: Nuevo): Observable<Resultado>{
-    return this._http.post<Resultado>(`${this.url}/analizador`, nuevo);
+    return this._http.post<Resultado>(`${this.url}/analizar`, nuevo);
   }
   constructor() { }
 }

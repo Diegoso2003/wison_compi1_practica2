@@ -1,3 +1,5 @@
+import { Lexer } from "../model/Lexer"
+
 export class TablaSimbolos {
     private tablaSimbolos = new Map<string, string>()
 
@@ -11,5 +13,18 @@ export class TablaSimbolos {
 
     public conseguirExpresion(nombre: string): string{
         return this.tablaSimbolos.get(nombre)!
+    }
+
+    public pasarAModelo(): Lexer{
+        let exprs: string[] = []
+        let terminales: string[] = []
+        this.tablaSimbolos.forEach((expr, terminal) => {
+            exprs.push(expr)
+            terminales.push(terminal)
+        })
+        return {
+            exprs: exprs,
+            terminales: terminales
+        }
     }
 }

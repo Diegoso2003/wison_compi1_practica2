@@ -1,18 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Validador } from '../../backend/validador-form';
 import { NgClass } from '@angular/common';
+import { InformacionService } from '../../services/informacion.service';
+import { GramaticaService } from '../../services/gramatica.service';
+import { Nuevo } from '../../model/Nuevo';
+import { Resultado } from '../../model/Resultado';
+import { InformacionComponent } from '../../informacion/informacion/informacion.component';
 
 @Component({
   selector: 'app-editor-analizador',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass],
+  imports: [ReactiveFormsModule, NgClass, InformacionComponent],
   templateUrl: './editor-analizador.component.html',
   styleUrl: './editor-analizador.component.scss'
 })
 export class EditorAnalizadorComponent {
   editorForm: FormGroup;
   private _validador!: Validador;
+  private _informacion = inject(InformacionService)
+  private _gramatica = inject(GramaticaService)
   
   constructor(private formBuilder: FormBuilder){
     this.editorForm = this.formBuilder.group({
@@ -32,7 +39,25 @@ export class EditorAnalizadorComponent {
   crear(){
     if(this.editorForm.valid){
       let nombre: string = localStorage.getItem('nombre') || 'analizador_nuevo';
+      let analizador: string = this.editorForm.get('analizador')?.value
+      let nuevo: Nuevo = {
+        nombre: nombre,
+        analizador: analizador
+      }
+      this._gramatica.crearNuevo(nuevo).subscribe({
+        next: (resultado: Resultado) => {
+          if(resultado.ok){
+            this._informacion.informarExito('Analizador creado exitosamente.')
+          } else {
+            this._informacion.informarErrores(resultado.errores)
+          }
+        },
+        error: (error) => {
+          this._informacion.informarError('Error al crear el analizador, intente más tarde')
+        }
+      });
     } else {
+      this._informacion.informarError('Ingrese una entrada valida.')
       this.editorForm.markAllAsTouched();
     }
   }

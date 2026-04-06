@@ -71,14 +71,13 @@
     recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
   }
 */
-// @ts-nocheck
 var wison = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,16],$V1=[1,22],$V2=[2,14,23],$V3=[2,41,43],$V4=[1,37],$V5=[1,48],$V6=[1,49],$V7=[1,45],$V8=[1,46],$V9=[1,47],$Va=[2,18,42],$Vb=[27,32],$Vc=[27,32,34,35,36],$Vd=[27,47],$Ve=[1,65],$Vf=[1,64],$Vg=[2,42],$Vh=[27,31],$Vi=[24,27,42,47];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,16],$V1=[1,22],$V2=[2,14,23],$V3=[2,41,43],$V4=[1,37],$V5=[1,48],$V6=[1,49],$V7=[1,45],$V8=[1,46],$V9=[1,47],$Va=[2,18,42],$Vb=[27,32],$Vc=[27,31],$Vd=[27,32,34,35,36],$Ve=[27,47],$Vf=[1,64],$Vg=[1,63],$Vh=[2,42],$Vi=[24,27,42,47];
 var parser = {trace: function trace () { },
 yy: {},
 symbols_: {"error":2,"analizador":3,"wison":4,"EOF":5,"WISON":6,"APERTURA":7,"lexico":8,"sintactico":9,"CIERRE":10,"LEX":11,"IN_LEX":12,"reglas_lexicas":13,"FIN_LEX":14,"SYNTAX":15,"IN_SYNTAX":16,"syntax":17,"FIN_SYNTAX":18,"no_terminales":19,"inicio":20,"producciones":21,"regla_lexica":22,"TERMINAL":23,"TERMINAL_NOMBRE":24,"FLECHA":25,"expr":26,"P_COMA":27,"unario":28,"combinado":29,"concatenacion":30,"PAREN_IZQ":31,"PAREN_DER":32,"simple":33,"KLEENE":34,"POSITIVO":35,"OPCIONAL":36,"CADENA":37,"LETRAS":38,"DIGITOS":39,"no_terminal":40,"NO_TERMINAL":41,"NO_TERMINAL_NOMBRE":42,"INICIO":43,"produccion":44,"ASIGNACION":45,"reglas":46,"OR":47,"listaSimbolos":48,"simbolo":49,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"EOF",6:"WISON",7:"APERTURA",10:"CIERRE",11:"LEX",12:"IN_LEX",14:"FIN_LEX",15:"SYNTAX",16:"IN_SYNTAX",18:"FIN_SYNTAX",23:"TERMINAL",24:"TERMINAL_NOMBRE",25:"FLECHA",27:"P_COMA",31:"PAREN_IZQ",32:"PAREN_DER",34:"KLEENE",35:"POSITIVO",36:"OPCIONAL",37:"CADENA",38:"LETRAS",39:"DIGITOS",41:"NO_TERMINAL",42:"NO_TERMINAL_NOMBRE",43:"INICIO",45:"ASIGNACION",47:"OR"},
-productions_: [0,[3,2],[4,6],[8,4],[9,4],[17,3],[13,2],[13,2],[13,1],[13,1],[22,5],[26,1],[26,1],[29,2],[29,2],[30,3],[28,2],[28,2],[28,2],[28,1],[33,1],[33,1],[33,1],[33,1],[19,2],[19,2],[19,1],[19,1],[40,3],[20,3],[21,2],[21,2],[21,1],[21,1],[44,4],[46,3],[46,2],[46,1],[46,0],[48,2],[48,1],[49,1],[49,1]],
+productions_: [0,[3,2],[4,6],[8,4],[9,4],[17,3],[13,2],[13,2],[13,1],[13,1],[22,5],[26,1],[26,1],[29,2],[29,1],[30,3],[28,2],[28,2],[28,2],[28,1],[33,1],[33,1],[33,1],[33,1],[19,2],[19,2],[19,1],[19,1],[40,3],[20,3],[21,2],[21,2],[21,1],[21,1],[44,4],[46,3],[46,2],[46,1],[46,0],[48,2],[48,1],[49,1],[49,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -88,7 +87,7 @@ case 1: case 7:
  this.$ = $$[$0-1]; 
 break;
 case 2:
- this.$ = new Creador($$[$0-3], $$[$0-2]) 
+ this.$ = new Creador($$[$0-3], $$[$0-2]); 
 break;
 case 3: case 4: case 15: case 25: case 31:
  this.$ = $$[$0-1] 
@@ -115,7 +114,7 @@ case 13:
  $$[$0-1].agregarExpresion($$[$0]); this.$ = $$[$0-1] 
 break;
 case 14:
- this.$ = new Concatenacion($$[$0-1], $$[$0]) 
+ this.$ = new Concatenacion($$[$0]) 
 break;
 case 16:
  this.$ = new Kleene($$[$0-1]) 
@@ -167,7 +166,7 @@ case 42:
 break;
 }
 },
-table: [{3:1,4:2,6:[1,3]},{1:[3]},{5:[1,4]},{7:[1,5]},{1:[2,1]},{8:6,11:[1,7]},{9:8,15:[1,9]},{12:[1,10]},{10:[1,11]},{16:[1,12]},{2:[1,15],13:13,22:14,23:$V0},{6:[1,17]},{2:[1,21],17:18,19:19,40:20,41:$V1},{2:[1,25],14:[1,23],22:24,23:$V0},o($V2,[2,8]),o($V2,[2,9]),{24:[1,26]},{5:[2,2]},{18:[1,27]},{2:[1,30],20:28,40:29,41:$V1,43:[1,31]},o($V3,[2,26]),o($V3,[2,27]),{42:[1,32]},{15:[2,3]},o($V2,[2,6]),o($V2,[2,7]),{25:[1,33]},{10:[2,4]},{2:[1,36],21:34,42:$V4,44:35},o($V3,[2,24]),o($V3,[2,25]),{42:[1,38]},{27:[1,39]},{24:$V5,26:40,28:41,29:42,30:44,31:$V6,33:43,37:$V7,38:$V8,39:$V9},{2:[1,51],18:[2,5],42:$V4,44:50},o($Va,[2,32]),o($Va,[2,33]),{45:[1,52]},{27:[1,53]},o($V3,[2,28]),{27:[1,54]},{27:[2,11]},{27:[2,12],30:55,31:$V6},o($Vb,[2,19],{34:[1,56],35:[1,57],36:[1,58]}),{30:59,31:$V6},o($Vc,[2,20]),o($Vc,[2,21]),o($Vc,[2,22]),o($Vc,[2,23]),{24:$V5,28:60,33:43,37:$V7,38:$V8,39:$V9},o($Va,[2,30]),o($Va,[2,31]),o($Vd,[2,38],{46:61,48:62,49:63,24:$Ve,42:$Vf}),o($Vg,[2,29]),o($V2,[2,10]),o($Vh,[2,13]),o($Vb,[2,16]),o($Vb,[2,17]),o($Vb,[2,18]),o($Vh,[2,14]),{32:[1,66]},{27:[1,67],47:[1,68]},o($Vd,[2,37],{49:69,24:$Ve,42:$Vf}),o($Vi,[2,40]),o($Vi,[2,41]),o($Vi,$Vg),o($Vh,[2,15]),o($Va,[2,34]),o($Vd,[2,36],{49:63,48:70,24:$Ve,42:$Vf}),o($Vi,[2,39]),o($Vd,[2,35],{49:69,24:$Ve,42:$Vf})],
+table: [{3:1,4:2,6:[1,3]},{1:[3]},{5:[1,4]},{7:[1,5]},{1:[2,1]},{8:6,11:[1,7]},{9:8,15:[1,9]},{12:[1,10]},{10:[1,11]},{16:[1,12]},{2:[1,15],13:13,22:14,23:$V0},{6:[1,17]},{2:[1,21],17:18,19:19,40:20,41:$V1},{2:[1,25],14:[1,23],22:24,23:$V0},o($V2,[2,8]),o($V2,[2,9]),{24:[1,26]},{5:[2,2]},{18:[1,27]},{2:[1,30],20:28,40:29,41:$V1,43:[1,31]},o($V3,[2,26]),o($V3,[2,27]),{42:[1,32]},{15:[2,3]},o($V2,[2,6]),o($V2,[2,7]),{25:[1,33]},{10:[2,4]},{2:[1,36],21:34,42:$V4,44:35},o($V3,[2,24]),o($V3,[2,25]),{42:[1,38]},{27:[1,39]},{24:$V5,26:40,28:41,29:42,30:44,31:$V6,33:43,37:$V7,38:$V8,39:$V9},{2:[1,51],18:[2,5],42:$V4,44:50},o($Va,[2,32]),o($Va,[2,33]),{45:[1,52]},{27:[1,53]},o($V3,[2,28]),{27:[1,54]},{27:[2,11]},{27:[2,12],30:55,31:$V6},o($Vb,[2,19],{34:[1,56],35:[1,57],36:[1,58]}),o($Vc,[2,14]),o($Vd,[2,20]),o($Vd,[2,21]),o($Vd,[2,22]),o($Vd,[2,23]),{24:$V5,28:59,33:43,37:$V7,38:$V8,39:$V9},o($Va,[2,30]),o($Va,[2,31]),o($Ve,[2,38],{46:60,48:61,49:62,24:$Vf,42:$Vg}),o($Vh,[2,29]),o($V2,[2,10]),o($Vc,[2,13]),o($Vb,[2,16]),o($Vb,[2,17]),o($Vb,[2,18]),{32:[1,65]},{27:[1,66],47:[1,67]},o($Ve,[2,37],{49:68,24:$Vf,42:$Vg}),o($Vi,[2,40]),o($Vi,[2,41]),o($Vi,$Vh),o($Vc,[2,15]),o($Va,[2,34]),o($Ve,[2,36],{49:62,48:69,24:$Vf,42:$Vg}),o($Vi,[2,39]),o($Ve,[2,35],{49:68,24:$Vf,42:$Vg})],
 defaultActions: {4:[2,1],17:[2,2],23:[2,3],27:[2,4],41:[2,11]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -433,7 +432,9 @@ _handle_error:
     const { Syntax } = require('../backend/syntax/Syntax')
 
     function errorLexico(){
-        yy.errores.push(
+        if (!this.yy) this.yy = {};
+        if (!this.yy.errores) this.yy.errores = [];
+        this.yy.errores.push(
             {
                 tipo: "Lexico",
                 lexema: yytext,
@@ -485,7 +486,9 @@ _handle_error:
     }
 
     parser.parseError = function (str, hash) {
-        yy.errores.push({
+        if (!this.yy) this.yy = {};
+        if (!this.yy.errores) this.yy.errores = [];
+        this.yy.errores.push({
             tipo: "Sintactico",
             lexema: hash.text || "",
             linea: hash.loc?.first_line || 0,
@@ -842,7 +845,7 @@ break;
 }
 },
 rules: [/^(?:([ \t\r\n]+))/,/^(?:#.*)/,/^(?:\/\*\*)/,/^(?:\*\/)/,/^(?:(.|\n))/,/^(?:Terminal\b)/,/^(?:\$_([a-zA-Z][a-zA-Z0-9_]*))/,/^(?:<-)/,/^(?:\[\^ \\t\\r\\n+                        return CADENA\n<LEX>"\[a-zA-Z\]"                            return LETRAS\n<LEX>"\[0-9\]"                               return DIGITOS\n<LEX>\\\*                                    return KLEENE\n<LEX>\\\+                                    return POSITIVO\n<LEX>\\\?                                    return OPCIONAL\n<LEX>\\\(                                    return PAREN_IZQ\n<LEX>\\\)                                    return PAREN_DER\n<LEX,SYNTAX>";"                            return P_COMA\n"Wison"                                    return WISON\n"¿"                                        return APERTURA\n"\?"                                        return CIERRE\n"Lex"                                      return LEX\n"Syntax"                                   return SYNTAX\n"\{\{:"                                      this\.begin\(SYNTAX\); return IN_SYNTAX\n":\}\}"                                      this\.begin\(INITIAL\); return FIN_SYNTAX\n"\{:"                                       this\.begin\(LEX\); return IN_LEX\n":\}"                                       this\.begin\(INITIAL\); return FIN_LEX\n<SYNTAX>"No_Terminal"                      return NO_TERMINAL\n<SYNTAX>"Initial_Sim"                      return INICIO\n<SYNTAX>"<="                               return ASIGNACION\n<SYNTAX>"%_"\{IDENTIFICADOR\}                return NO_TERMINAL_NOMBRE\n<SYNTAX>"\|"                                return OR\n<<EOF>>                                    return EOF.)/],
-conditions: {"SYNTAX":{"rules":[1,2],"inclusive":false},"LEX":{"rules":[1,2,5,6,7,8],"inclusive":false},"COMENTARIO":{"rules":[3,4],"inclusive":false},"INITIAL":{"rules":[0,1,2],"inclusive":true}}
+conditions: {"SYNTAX":{"rules":[1,2,6],"inclusive":false},"LEX":{"rules":[1,2,5,6,7,8],"inclusive":false},"COMENTARIO":{"rules":[3,4],"inclusive":false},"INITIAL":{"rules":[0,1,2],"inclusive":true}}
 });
 return lexer;
 })();

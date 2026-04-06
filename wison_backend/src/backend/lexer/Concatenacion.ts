@@ -4,10 +4,9 @@ import { Expresion } from "./Expresion";
 export class Concatenacion extends Expresion{
     private expresiones: Expresion[] = []
 
-    constructor(expresion1: Expresion, expresion2: Expresion){
+    constructor(expresion1: Expresion){
         super()
         this.expresiones.push(expresion1)
-        this.expresiones.push(expresion2)
     }
 
     agregarExpresion(expresion: Expresion){
