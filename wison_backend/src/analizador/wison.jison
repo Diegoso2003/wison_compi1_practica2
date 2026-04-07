@@ -14,19 +14,8 @@
     const { Produccion } = require('../backend/syntax/Produccion')
     const { Syntax } = require('../backend/syntax/Syntax')
 
-    function errorLexico(){
-        if (!this.yy) this.yy = {};
-        if (!this.yy.errores) this.yy.errores = [];
-        this.yy.errores.push(
-            {
-                tipo: "Lexico",
-                lexema: yytext,
-                linea: yylloc.first_line,
-                columna: yylloc.first_column,
-                descripcion: `Caracter no reconocido: ${yytext}`
-            }
-        )
-    }
+    const { ErrorM } = require('../backend/ErrorM');
+    const errorManager = ErrorM.getInstance();
 
     function traducirToken(token) {
         switch(token) {
@@ -69,70 +58,82 @@
     }
 
     parser.parseError = function (str, hash) {
-        if (!this.yy) this.yy = {};
-        if (!this.yy.errores) this.yy.errores = [];
-        this.yy.errores.push({
+        errorManager.agregarError({
             tipo: "Sintactico",
-            lexema: hash.text || "",
-            linea: hash.loc?.first_line || 0,
-            columna: hash.loc?.first_column || 0,
+            lexema: hash.token || this.lexer?.yytext || "",
+            linea: (hash.loc?.first_line || 0),
+            columna: (hash.loc?.first_column || 0),
             descripcion: construirDescripcionError(hash.expected)
         });
+        
+        return;
     };
 %}
 
 %lex
 
-IDENTIFICADOR [a-zA-Z][a-zA-Z0-9_]*
-NUMERO [0-9]+
-WHITESPACE [ \t\r\n]+
-
 %options locations
+%options flex
 
 %x COMENTARIO
 %x LEX
 %x SYNTAX
 
 %%
-{WHITESPACE}                               /* Ignorar espacios en blanco */
-<INITIAL,LEX,SYNTAX>"#".*                  /* Ignorar comentarios de una línea */
+<INITIAL,LEX,SYNTAX>\#[^\n]*               /* Ignorar comentarios de una línea */
+<INITIAL,LEX,SYNTAX>[ \t\r\n]+             /* Ignorar espacios en blanco */
 <INITIAL,LEX,SYNTAX>\/\*\*                 this.begin('COMENTARIO')  /* Iniciar comentario de varias líneas */
 <COMENTARIO>\*\/                           this.popState()  /* Finalizar comentario de varias líneas */
 <COMENTARIO>(.|\n)                         /* Ignorar el contenido del comentario */
 <LEX>"Terminal"                            return 'TERMINAL'
-<LEX,SYNTAX>\$_{IDENTIFICADOR}                    return 'TERMINAL_NOMBRE'
+<LEX,SYNTAX>\$_[a-zA-Z][a-zA-Z0-9_]*       return 'TERMINAL_NOMBRE'
 <LEX>"<-"                                  return 'FLECHA'
-<LEX>'[^ \t\r\n']+'                        return 'CADENA'
-<LEX>"[a-zA-Z]"                            return 'LETRAS'
+<LEX>"'"[^ \t\r\n']+"'"                    return 'CADENA'
+<LEX>"[aA-zZ]"                             return 'LETRAS'
 <LEX>"[0-9]"                               return 'DIGITOS'
 <LEX>\*                                    return 'KLEENE'
 <LEX>\+                                    return 'POSITIVO'
-<LEX>\?                                    return 'OPCIONAL'
+<LEX>\?                                    return 'OPCIONAL';
 <LEX>\(                                    return 'PAREN_IZQ'
 <LEX>\)                                    return 'PAREN_DER'
 <LEX,SYNTAX>";"                            return 'P_COMA'
-"Wison"                                    return 'WISON'
-"¿"                                        return 'APERTURA'
-"?"                                        return 'CIERRE'
-"Lex"                                      return 'LEX'
-"Syntax"                                   return 'SYNTAX'
-"{{:"                                      this.begin('SYNTAX'); return 'IN_SYNTAX'
-":}}"                                      this.begin('INITIAL'); return 'FIN_SYNTAX'
-"{:"                                       this.begin('LEX'); return 'IN_LEX'
-":}"                                       this.begin('INITIAL'); return 'FIN_LEX'
+<INITIAL>"Wison"                           return 'WISON'
+<INITIAL>"¿"                               return 'APERTURA'
+<INITIAL>"?"                               return 'CIERRE'
+<INITIAL>"Lex"                             return 'LEX'
+<INITIAL>"Syntax"                          return 'SYNTAX'
+<INITIAL>"{{:"                             this.begin('SYNTAX'); return 'IN_SYNTAX'
+<SYNTAX>":}}"                              this.begin('INITIAL'); return 'FIN_SYNTAX'
+<INITIAL>"{:"                              this.begin('LEX'); return 'IN_LEX'
+<LEX>":}"                                  this.begin('INITIAL'); return 'FIN_LEX'
 <SYNTAX>"No_Terminal"                      return 'NO_TERMINAL'
 <SYNTAX>"Initial_Sim"                      return 'INICIO'
 <SYNTAX>"<="                               return 'ASIGNACION'
-<SYNTAX>"%_"{IDENTIFICADOR}                return 'NO_TERMINAL_NOMBRE'
+<SYNTAX>"%"_[a-zA-Z][a-zA-Z0-9_]*            return 'NO_TERMINAL_NOMBRE'
 <SYNTAX>"|"                                return 'OR'
 <<EOF>>                                    return 'EOF'
-.                                          errorLexico()
+<INITIAL,LEX,SYNTAX>.                      {
+    if (yytext && yytext.length > 0) {
+        const errorLexico = {
+            tipo: "Lexico",
+            lexema: yytext,
+            linea: yylloc.first_line,
+            columna: yylloc.first_column+1,
+            descripcion: `Caracter no reconocido: '${yytext}' (código ASCII: ${yytext.charCodeAt(0)})`
+        };
+        
+        errorManager.agregarError(errorLexico);
+    }
+}
 
 /lex
 %start analizador
 %%
 
-analizador : wison EOF                              { $$ = $1; }
+analizador : wison EOF                              { $$ = $1; return $1;}
+    | error wison                                   { $$ = $2; }
+    | wison error                                   { $$ = $1; }
+    | error EOF                                     { $$ = {}; }             
     ;
 
 wison : WISON APERTURA lexico sintactico 
@@ -149,9 +150,7 @@ syntax : no_terminales inicio producciones          { $$ = new Syntax($1, $2, $3
     ;
 
 reglas_lexicas : reglas_lexicas regla_lexica        { $$ = $1; $1.push($2) }
-    | reglas_lexicas error                          { $$ = $1; }
     | regla_lexica                                  { $$ = [$1]; }
-    | error                                         { $$ = []; }
     ;
 
 regla_lexica : TERMINAL TERMINAL_NOMBRE 
@@ -176,13 +175,13 @@ unario : simple KLEENE                              { $$ = new Kleene($1) }
     ;
 
 simple : CADENA                                     { $$ = new Cadena($1) }
-    | LETRAS                                        { $$ = new Secuencia($1) }
+    | LETRAS                                        { $$ = new Secuencia("[a-zA-ZñÑ]") }
     | DIGITOS                                       { $$ = new Secuencia($1) }
-    | TERMINAL_NOMBRE                               { $$ = new IdentiExpresion($2, @2.first_line, @2.first_column) }
+    | TERMINAL_NOMBRE                               { $$ = new IdentiExpresion($1, @1.first_line, @1.first_column) }
     ;
 
 no_terminales : no_terminales no_terminal           { $$ = $1; $1.push($2) }
-    | no_terminales error                           { $$ = $1 }
+    | no_terminales error                           { $$ = $1; }
     | no_terminal                                   { $$ = [$1] }
     | error                                         { $$ = [] }
     ;
@@ -211,7 +210,9 @@ reglas : reglas OR listaSimbolos                    { $$ = $1; $1.push($3) }
     ;
 
 listaSimbolos : listaSimbolos simbolo               { $$ = $1; $1.push($2) }
+    | listaSimbolos error                           { $$ = $1 }
     | simbolo                                       { $$ = [$1] }
+    | error                                         { $$ = [] }
     ;
 
 simbolo : NO_TERMINAL_NOMBRE                        { $$ = new Simbolo($1, @1.first_line, @1.first_column, false) }

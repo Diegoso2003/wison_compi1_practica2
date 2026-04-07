@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Validador } from '../../backend/validador-form';
 import { NgClass } from '@angular/common';
@@ -15,17 +15,46 @@ import { InformacionComponent } from '../../informacion/informacion/informacion.
   templateUrl: './editor-analizador.component.html',
   styleUrl: './editor-analizador.component.scss'
 })
-export class EditorAnalizadorComponent {
+export class EditorAnalizadorComponent implements AfterViewInit {
+  @ViewChild('codeEditor') codeEditor!: ElementRef<HTMLTextAreaElement>;
+  
   editorForm: FormGroup;
   private _validador!: Validador;
   private _informacion = inject(InformacionService)
   private _gramatica = inject(GramaticaService)
+  
+  lineaActual: number = 1;
+  columnaActual: number = 1;
   
   constructor(private formBuilder: FormBuilder){
     this.editorForm = this.formBuilder.group({
       analizador: ['', Validators.pattern(/^(?!\s*$).+/)]
     });
     this._validador = new Validador(this.editorForm);
+  }
+
+  ngAfterViewInit(): void {
+    this.setupEditorListeners();
+  }
+
+  setupEditorListeners(): void {
+    const textarea = this.codeEditor.nativeElement;
+    
+    textarea.addEventListener('click', () => this.actualizarPosicion());
+    textarea.addEventListener('keyup', () => this.actualizarPosicion());
+    textarea.addEventListener('keydown', () => this.actualizarPosicion());
+    textarea.addEventListener('input', () => this.actualizarPosicion());
+  }
+
+  actualizarPosicion(): void {
+    const textarea = this.codeEditor.nativeElement;
+    const texto = textarea.value;
+    const cursorPos = textarea.selectionStart;
+    
+    const textoAntes = texto.substring(0, cursorPos);
+    const lineas = textoAntes.split('\n');
+    this.lineaActual = lineas.length;
+    this.columnaActual = lineas[lineas.length - 1].length + 1;
   }
 
   esAnalizadorValido(){

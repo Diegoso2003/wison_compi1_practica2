@@ -8,6 +8,7 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   console.error(err);
+  console.log(err);
 
   res.status(err.status || 500).json({
     message: err.message || "Error interno",

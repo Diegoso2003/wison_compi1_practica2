@@ -15,11 +15,13 @@ export class InformacionService {
   public informarError(mensaje: string) {
     this.hayError = true;
     this.mensaje = mensaje;
+    this.hayErrores = false;
     this.exito = false;
   }
 
   public informarExito(mensaje: string) {
     this.hayError = false;
+    this.hayErrores = false;
     this.mensaje = mensaje;
     this.exito = true;
     this.mostrarAlertaExito = true;

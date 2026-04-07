@@ -28,6 +28,7 @@ export class Produccion {
       let noTerminal: NoTerminal = tablaNoTerminales.get(this.nombre)!;
       this.listaSimbolos.forEach((produccion) => {
         let producciones: string[] = [];
+        produccion.forEach((p1) => {producciones.push(p1.getNombre())})
         if(produccion.length!==0){
           let p: Simbolo = produccion[0]!
         if (p.getTerminal()) {

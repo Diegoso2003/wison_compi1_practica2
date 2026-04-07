@@ -1,19 +1,19 @@
 import { Entrada } from "../model/Entrada";
 import { Creador } from "./CreadorGramatica/Creador";
 import { GramaticaDAO } from "./DB/GramaticaDAO";
+import { ErrorM } from "./ErrorM";
 import { MensajeError } from "./MensajeError";
 
-const parser = require('../analizador/wison.js');
 const gramaticaDao: GramaticaDAO = new GramaticaDAO()
 
 export class Analizador {
-    
-    private errores: MensajeError[] = []
 
     async analizar(input: Entrada): Promise<any> {
+        
         try {
-            parser.yy = { errores: [] };
-
+            let parser = require('../analizador/wison.js');
+            const erroM = ErrorM.getInstance()
+            erroM.clear()
             if(input.analizador.length === 0 || input.nombre.length === 0){
                 return {
                     ok: false,
@@ -26,44 +26,40 @@ export class Analizador {
                     }]
                 };
             }
-            console.log("iniciando...")
-            console.log(input.analizador)
             const resultado = parser.parse(input.analizador);
-            console.log("fin")
-            this.errores = parser.yy.errores || [];
-            if(resultado instanceof Creador){
-                console.log("es valido")
-                resultado.analizar(this.errores)
-                if(this.errores.length === 0){
+            if (resultado && resultado.constructor.name === "Creador"){
+                resultado.analizar(erroM.getErrores())
+                if(!erroM.hasErrors()){
                     await gramaticaDao.crear(resultado.crearModeloGramatica(), input.nombre)
                 }
             }
-            if (parser.yy.errores.length > 0) {
+            if (erroM.hasErrors()) {
                 return {
                     ok: false,
-                    errores: parser.yy.errores
+                    errores: erroM.getErrores()
                 };
             }
             return {
                 ok: true
             };
         } catch (error: any) {
+            console.log(error)
+            const erroresParser:MensajeError[] = []
+            
             return {
                 ok: false,
-                errores: [...(parser.yy?.errores || []),
-                {
-                    lexema: "",
-                    linea: 0,
-                    columna: 0,
-                    descripcion: error.message || "Error inesperado",
-                    tipo: "Fatal"
-                }]
+                errores: [
+                    ...erroresParser,
+                    {
+                        lexema: "",
+                        linea: 0,
+                        columna: 0,
+                        descripcion: error.message || "Error inesperado durante el análisis",
+                        tipo: "Fatal"
+                    }
+                ]
             };
         }
-    }
-
-    public getErrores(): MensajeError[]{
-        return this.errores
     }
 
 }

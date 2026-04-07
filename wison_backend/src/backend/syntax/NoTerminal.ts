@@ -62,7 +62,7 @@ export class NoTerminal {
         lexema: simbolo.getNombre(),
         descripcion: `Conflicto con:
           ${this.nombre} <= ${this.primerVacios.join(" ")};
-          ${this.nombre} <= ${produccion.join(" ")}`,
+          ${this.nombre} <= ${produccion.join(" ")};`,
       });
     }
   }
@@ -102,11 +102,13 @@ export class NoTerminal {
       );
       this.contadorPrimeros = 0;
       let cadena: string[] = [];
+      produccion.forEach((simbolo) => {
+            cadena.push(simbolo.getNombre());
+      });
       primeros.forEach((producciones, terminal) => {
         if (!this.primeros.has(terminal)) {
-          produccion.forEach((simbolo) => {
-            cadena.push(simbolo.getNombre());
-          });
+          console.log("primero terminal")
+          console.log(cadena)
           this.primeros.set(terminal, cadena);
         } else {
           creador.getErrores().push({

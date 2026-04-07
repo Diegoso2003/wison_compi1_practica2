@@ -7,93 +7,218 @@ $accent-primary: #7e6b9e;
 $accent-error: #f28b82;
 
 $text-primary: #e1e1e6;
-$text-secondary: #a1a1b0;
+$text-secondary: #c0c0d0;  /* Aumentado el brillo para mejor contraste */
+$text-muted: #a0a0b0;
 
-/* ===== MODAL ===== */
-.custom-modal {
-  background-color: $editor-bg;
-  color: $text-primary;
-  border-radius: 10px;
-  width: 75vw;   // 75% pantalla
-  max-width: 1000px;
+/* ===== ESTILOS DEL MODAL (usando ::ng-deep) ===== */
+::ng-deep .custom-modal-window {
+  .modal-content {
+    background-color: $editor-bg;
+    color: $text-primary;
+    border-radius: 10px;
+    border: 1px solid $editor-line;
+  }
+
+  .modal-header {
+    background-color: $editor-bg;
+    border-bottom: 2px solid $editor-line;
+    padding: 1.5rem;
+
+    .modal-title {
+      color: $text-primary;
+      font-weight: 600;
+      font-size: 1.25rem;
+    }
+
+    .btn-close {
+      filter: invert(1);
+      opacity: 0.8;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .modal-body {
+    padding: 0;
+    background-color: $editor-bg;
+  }
+
+  .modal-footer {
+    background-color: $editor-bg;
+    border-top: 2px solid $editor-line;
+    padding: 1rem 1.5rem;
+  }
 }
 
-/* HEADER */
-.modal-header {
-  border-bottom: 1px solid $editor-line;
-}
-
-/* BODY */
-.modal-body {
-  padding: 0;
-}
-
-/* CONTENEDOR CON SCROLL */
+/* ===== CONTENEDOR CON SCROLL ===== */
 .table-container {
-  max-height: 60vh;   // altura máxima
-  overflow-y: auto;   // scroll vertical
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: auto;
+
+  /* Estilos del scrollbar */
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $editor-bg;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $accent-primary;
+    border-radius: 4px;
+
+    &:hover {
+      background: lighten($accent-primary, 10%);
+    }
+  }
 }
 
-/* TABLA */
+/* ===== TABLA ===== */
 .error-table {
   width: 100%;
   border-collapse: collapse;
   background-color: $editor-surface;
+  margin: 0;
+  font-size: 14px; /* Tamaño base de la tabla aumentado */
+
+  /* HEADER TABLA */
+  thead {
+    position: sticky;
+    top: 0;
+    background-color: $editor-bg;
+    z-index: 10;
+
+    th {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 2px solid $editor-line;
+      color: $accent-primary;
+      font-weight: 700; /* Más grueso */
+      font-size: 0.95rem; /* Más grande */
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  /* CUERPO TABLA */
+  tbody {
+    tr {
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: rgba(126, 107, 158, 0.15);
+      }
+
+      td {
+        padding: 0.875rem 1rem;
+        border-bottom: 1px solid $editor-line;
+        color: $text-primary;
+        font-size: 0.95rem; /* Texto más grande */
+
+        /* Primera columna (Tipo) */
+        &:first-child {
+          color: $accent-error;
+          font-weight: 600;
+        }
+
+        /* Columnas numéricas (Línea, Columna) */
+        &:nth-child(2),
+        &:nth-child(3) {
+          font-family: 'Courier New', monospace;
+          color: $text-secondary;
+          text-align: center;
+          width: 80px;
+          font-size: 0.95rem;
+          font-weight: 500;
+        }
+
+        /* Columna Lexema - Mejorado el contraste */
+        &:nth-child(4) {
+          font-family: 'Courier New', monospace;
+          color: #d4b8ff; /* Color más claro y brillante */
+          background-color: rgba(126, 107, 158, 0.1); /* Fondo más notorio */
+          font-weight: 600; /* Texto en negritas */
+          font-size: 1rem; /* Tamaño más grande */
+          letter-spacing: 0.3px;
+        }
+
+        /* Columna Descripción */
+        &:last-child {
+          color: $text-secondary;
+          font-size: 0.95rem;
+          line-height: 1.4;
+        }
+      }
+    }
+
+    /* Alternar colores de filas */
+    tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.03); /* Ligeramente más notorio */
+    }
+  }
 }
 
-/* HEADER TABLA */
-.error-table thead {
-  position: sticky;
-  top: 0;
-  background-color: $editor-bg;
-  z-index: 1;
-}
-
-.error-table th {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid $editor-line;
-  color: $text-secondary;
-}
-
-/* FILAS */
-.error-table td {
-  padding: 10px;
-  border-bottom: 1px solid $editor-line;
-}
-
-/* HOVER */
-.error-table tbody tr:hover {
-  background-color: rgba(126, 107, 158, 0.1);
-}
-
-/* COLUMNAS ESPECIALES */
-.tipo {
-  color: $accent-error;
-  font-weight: bold;
-}
-
-.lexema {
-  font-family: monospace;
-  color: $accent-primary;
-}
-
-.descripcion {
-  color: $text-secondary;
-}
-
-/* FOOTER */
-.modal-footer {
-  border-top: 1px solid $editor-line;
-}
-
-/* BOTÓN */
+/* ===== BOTÓN ===== */
 .custom-button {
   background-color: $accent-primary;
   color: white;
   border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: lighten($accent-primary, 10%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(126, 107, 158, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
 
-.custom-button:hover {
-  opacity: 0.9;
+/* ===== ESTILO ADICIONAL PARA MEJOR LEGIBILIDAD ===== */
+
+/* Aumentar el tamaño general de la tabla en pantallas grandes */
+@media (min-width: 1200px) {
+  .error-table {
+    font-size: 15px;
+    
+    td {
+      padding: 1rem 1.25rem;
+      
+      &:nth-child(4) {
+        font-size: 1.05rem;
+      }
+    }
+    
+    th {
+      font-size: 1rem;
+    }
+  }
+}
+
+/* Mejorar el contraste del texto en hover */
+.error-table tbody tr:hover td:nth-child(4) {
+  background-color: rgba(126, 107, 158, 0.2);
+  color: #e6d0ff;
+}
+
+/* Asegurar que el texto de descripción sea legible */
+/* Columna Descripción (quinta columna) */
+.error-table tbody td:last-child {
+  color: $text-secondary;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  white-space: pre-wrap;  /* ← Agrega esto */
+  word-break: break-word;
+  max-width: 400px;
 }

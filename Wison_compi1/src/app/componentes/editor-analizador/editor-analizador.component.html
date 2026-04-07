@@ -1,38 +1,52 @@
 <app-informacion></app-informacion>
 <div class="d-flex align-items-center justify-content-center">
-
   <div class="card w-75 m-3 shadow">
     <div class="card-body custom-card">
-        <h5 class="card-title text-center mb-3">Nuevo analizador</h5>
-      <form class="needs-validation" novalidate [formGroup]='editorForm' (submit)="crear()">
-        
+      <h5 class="card-title text-center mb-3">Nuevo analizador</h5>
+      
+      <form class="needs-validation" novalidate [formGroup]="editorForm">
         <div class="position-relative"
-            [ngClass]="{'mb-5' : esAnalizadorInvalido(),
-            'mb-3' : esAnalizadorValido()
-          }"
-          >
+          [ngClass]="{
+            'mb-5': esAnalizadorInvalido(),
+            'mb-3': esAnalizadorValido()
+          }">
+          
+          <!-- Textarea del código -->
           <textarea
-            class="code-textarea form-control" 
+            #codeEditor
+            class="code-textarea form-control"
             placeholder="Escribe tu código aquí..."
-            rows="25"
+            rows="18"
             id="validationTooltip01"
             formControlName="analizador"
-            [ngClass]="{'is-invalid' : esAnalizadorInvalido(),
-                'is-valid' : esAnalizadorValido()
-             }"
+            [ngClass]="{
+              'is-invalid': esAnalizadorInvalido(),
+              'is-valid': esAnalizadorValido()
+            }"
             required
-            >
-          </textarea>
+          ></textarea>
+
+          <div class="editor-status-bar">
+            <div class="status-right">
+              <span class="status-item">
+                📍 Línea: {{ lineaActual }}
+              </span>
+              <span class="status-item">
+                📐 Columna: {{ columnaActual }}
+              </span>
+            </div>
+          </div>
+
           <div class="invalid-tooltip">
             @if(esAnalizadorInvalido()) {
-                Ingrese una entrada valida
+              Ingrese una entrada valida
             }
           </div>
         </div>
         <br/>
 
         <div class="mb-3 d-flex justify-content-center">
-          <button class="custom-button" type="submit">Crear analizador</button>
+          <button class="custom-button" type="button" (click)="crear()">Crear analizador</button>
         </div>
       </form>
     </div>
