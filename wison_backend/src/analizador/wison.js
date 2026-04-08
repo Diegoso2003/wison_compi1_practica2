@@ -71,13 +71,14 @@
     recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
   }
 */
+// @ts-nocheck
 var wison = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,4],$V1=[1,19],$V2=[1,25],$V3=[14,23],$V4=[2,41,43],$V5=[1,39],$V6=[1,50],$V7=[1,51],$V8=[1,47],$V9=[1,48],$Va=[1,49],$Vb=[2,18,42],$Vc=[27,32],$Vd=[27,31],$Ve=[27,32,34,35,36],$Vf=[27,47],$Vg=[1,65],$Vh=[1,67],$Vi=[1,66],$Vj=[2,42],$Vk=[1,72],$Vl=[2,24,27,42,47];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,3],$V1=[1,5],$V2=[2,5],$V3=[1,18],$V4=[2,27],$V5=[17,27],$V6=[1,31],$V7=[2,18],$V8=[2,45,47],$V9=[1,49],$Va=[1,50],$Vb=[1,46],$Vc=[1,47],$Vd=[1,48],$Ve=[2,11],$Vf=[1,55],$Vg=[31,36],$Vh=[31,35],$Vi=[31,36,38,39,40],$Vj=[2,22,46],$Vk=[31,51],$Vl=[1,72],$Vm=[1,74],$Vn=[1,73],$Vo=[2,46],$Vp=[1,78],$Vq=[2,28,31,46,51];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"analizador":3,"wison":4,"EOF":5,"WISON":6,"APERTURA":7,"lexico":8,"sintactico":9,"CIERRE":10,"LEX":11,"IN_LEX":12,"reglas_lexicas":13,"FIN_LEX":14,"SYNTAX":15,"IN_SYNTAX":16,"syntax":17,"FIN_SYNTAX":18,"no_terminales":19,"inicio":20,"producciones":21,"regla_lexica":22,"TERMINAL":23,"TERMINAL_NOMBRE":24,"FLECHA":25,"expr":26,"P_COMA":27,"unario":28,"combinado":29,"concatenacion":30,"PAREN_IZQ":31,"PAREN_DER":32,"simple":33,"KLEENE":34,"POSITIVO":35,"OPCIONAL":36,"CADENA":37,"LETRAS":38,"DIGITOS":39,"no_terminal":40,"NO_TERMINAL":41,"NO_TERMINAL_NOMBRE":42,"INICIO":43,"produccion":44,"ASIGNACION":45,"reglas":46,"OR":47,"listaSimbolos":48,"simbolo":49,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",6:"WISON",7:"APERTURA",10:"CIERRE",11:"LEX",12:"IN_LEX",14:"FIN_LEX",15:"SYNTAX",16:"IN_SYNTAX",18:"FIN_SYNTAX",23:"TERMINAL",24:"TERMINAL_NOMBRE",25:"FLECHA",27:"P_COMA",31:"PAREN_IZQ",32:"PAREN_DER",34:"KLEENE",35:"POSITIVO",36:"OPCIONAL",37:"CADENA",38:"LETRAS",39:"DIGITOS",41:"NO_TERMINAL",42:"NO_TERMINAL_NOMBRE",43:"INICIO",45:"ASIGNACION",47:"OR"},
-productions_: [0,[3,2],[3,2],[3,2],[3,2],[4,6],[8,4],[9,4],[17,3],[13,2],[13,1],[22,5],[26,1],[26,1],[29,2],[29,1],[30,3],[28,2],[28,2],[28,2],[28,1],[33,1],[33,1],[33,1],[33,1],[19,2],[19,2],[19,1],[19,1],[40,3],[20,3],[21,2],[21,2],[21,1],[21,1],[44,4],[46,3],[46,2],[46,1],[46,0],[48,2],[48,2],[48,1],[48,1],[49,1],[49,1]],
+symbols_: {"error":2,"gramatica":3,"analizador":4,"EOF":5,"wison":6,"WISON":7,"APERTURA":8,"lexico":9,"sintactico":10,"CIERRE":11,"inicio_lex":12,"LEX":13,"IN_LEX":14,"reglas_lexicas":15,"final_lex":16,"FIN_LEX":17,"SYNTAX":18,"IN_SYNTAX":19,"syntax":20,"final_syntax":21,"FIN_SYNTAX":22,"no_terminales":23,"inicio":24,"producciones":25,"regla_lexica":26,"TERMINAL":27,"TERMINAL_NOMBRE":28,"FLECHA":29,"expr":30,"P_COMA":31,"unario":32,"combinado":33,"concatenacion":34,"PAREN_IZQ":35,"PAREN_DER":36,"simple":37,"KLEENE":38,"POSITIVO":39,"OPCIONAL":40,"CADENA":41,"LETRAS":42,"DIGITOS":43,"no_terminal":44,"NO_TERMINAL":45,"NO_TERMINAL_NOMBRE":46,"INICIO":47,"produccion":48,"ASIGNACION":49,"reglas":50,"OR":51,"listaSimbolos":52,"simbolo":53,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",7:"WISON",8:"APERTURA",11:"CIERRE",13:"LEX",14:"IN_LEX",17:"FIN_LEX",18:"SYNTAX",19:"IN_SYNTAX",22:"FIN_SYNTAX",27:"TERMINAL",28:"TERMINAL_NOMBRE",29:"FLECHA",31:"P_COMA",35:"PAREN_IZQ",36:"PAREN_DER",38:"KLEENE",39:"POSITIVO",40:"OPCIONAL",41:"CADENA",42:"LETRAS",43:"DIGITOS",45:"NO_TERMINAL",46:"NO_TERMINAL_NOMBRE",47:"INICIO",49:"ASIGNACION",51:"OR"},
+productions_: [0,[3,2],[4,2],[4,1],[6,6],[6,2],[12,2],[12,2],[9,3],[16,1],[16,2],[10,4],[21,1],[21,2],[20,3],[15,2],[15,1],[26,5],[30,1],[30,1],[33,2],[33,1],[34,3],[32,2],[32,2],[32,2],[32,1],[37,1],[37,1],[37,1],[37,1],[23,2],[23,2],[23,1],[23,1],[44,3],[24,3],[25,2],[25,2],[25,1],[25,1],[48,4],[50,3],[50,2],[50,1],[50,0],[52,2],[52,2],[52,1],[52,1],[53,1],[53,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -86,97 +87,94 @@ switch (yystate) {
 case 1:
  this.$ = $$[$0-1]; return $$[$0-1];
 break;
-case 2:
- this.$ = $$[$0]; 
-break;
-case 3: case 26:
- this.$ = $$[$0-1]; 
-break;
-case 4:
- this.$ = {}; 
-break;
-case 5:
- this.$ = new Creador($$[$0-3], $$[$0-2]); 
-break;
-case 6: case 7: case 16: case 32: case 41:
- this.$ = $$[$0-1] 
-break;
-case 8:
- this.$ = new Syntax($$[$0-2], $$[$0-1], $$[$0]) 
-break;
-case 9: case 25: case 31: case 40:
- this.$ = $$[$0-1]; $$[$0-1].push($$[$0]) 
-break;
-case 10:
- this.$ = [$$[$0]]; 
-break;
-case 11:
- this.$ = new ReglaLexica($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
-break;
-case 12: case 13: case 20:
+case 2: case 18: case 19: case 26:
  this.$ = $$[$0] 
 break;
-case 14:
- $$[$0-1].agregarExpresion($$[$0]); this.$ = $$[$0-1] 
+case 3:
+ this.$ = $$[$0]
 break;
-case 15:
- this.$ = new Concatenacion($$[$0]) 
+case 4:
+ this.$ = new Creador($$[$0-3], $$[$0-2]); 
+break;
+case 5: case 32:
+ this.$ = $$[$0-1]; 
+break;
+case 8: case 11: case 22: case 38: case 47:
+ this.$ = $$[$0-1] 
+break;
+case 14:
+ this.$ = new Syntax($$[$0-2], $$[$0-1], $$[$0]) 
+break;
+case 15: case 31: case 37: case 46:
+ this.$ = $$[$0-1]; $$[$0-1].push($$[$0]) 
+break;
+case 16:
+ this.$ = [$$[$0]]; 
 break;
 case 17:
- this.$ = new Kleene($$[$0-1]) 
+ this.$ = new ReglaLexica($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
 break;
-case 18:
- this.$ = new Positiva($$[$0-1]) 
-break;
-case 19:
- this.$ = new Opcional($$[$0-1]) 
+case 20:
+ $$[$0-1].agregarExpresion($$[$0]); this.$ = $$[$0-1] 
 break;
 case 21:
- this.$ = new Cadena($$[$0]) 
-break;
-case 22:
- this.$ = new Secuencia("[a-zA-ZñÑ]") 
+ this.$ = new Concatenacion($$[$0]) 
 break;
 case 23:
- this.$ = new Secuencia($$[$0]) 
+ this.$ = new Kleene($$[$0-1]) 
 break;
 case 24:
- this.$ = new IdentiExpresion($$[$0], _$[$0].first_line, _$[$0].first_column) 
+ this.$ = new Positiva($$[$0-1]) 
 break;
-case 27: case 33: case 38: case 42:
- this.$ = [$$[$0]] 
+case 25:
+ this.$ = new Opcional($$[$0-1]) 
 break;
-case 28: case 34: case 43:
- this.$ = [] 
+case 27:
+ this.$ = new Cadena($$[$0]) 
+break;
+case 28:
+ this.$ = new Secuencia("[a-zA-ZñÑ]") 
 break;
 case 29:
- this.$ = new NoTerminal($$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column) 
+ this.$ = new Secuencia($$[$0]) 
 break;
 case 30:
- this.$ = new Inicial($$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column) 
+ this.$ = new IdentiExpresion($$[$0], _$[$0].first_line, _$[$0].first_column) 
+break;
+case 33: case 39: case 44: case 48:
+ this.$ = [$$[$0]] 
+break;
+case 34: case 40: case 49:
+ this.$ = [] 
 break;
 case 35:
- this.$ = new Produccion($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+ this.$ = new NoTerminal($$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column) 
 break;
 case 36:
+ this.$ = new Inicial($$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column) 
+break;
+case 41:
+ this.$ = new Produccion($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
+break;
+case 42:
  this.$ = $$[$0-2]; $$[$0-2].push($$[$0]) 
 break;
-case 37:
+case 43:
  this.$ = $$[$0-1]; $$[$0-1].push([new Simbolo("", this._$.first_line, this._$.first_column, true)]) 
 break;
-case 39:
+case 45:
  this.$ = [[new Simbolo("", this._$.first_line, this._$.first_column, true)]] 
 break;
-case 44:
+case 50:
  this.$ = new Simbolo($$[$0], _$[$0].first_line, _$[$0].first_column, false) 
 break;
-case 45:
+case 51:
  this.$ = new Simbolo($$[$0], _$[$0].first_line, _$[$0].first_column, true) 
 break;
 }
 },
-table: [{2:[1,3],3:1,4:2,6:$V0},{1:[3]},{2:[1,6],5:[1,5]},{4:7,5:[1,8],6:$V0},{7:[1,9]},{1:[2,1]},{1:[2,3]},{1:[2,2]},{1:[2,4]},{8:10,11:[1,11]},{9:12,15:[1,13]},{12:[1,14]},{10:[1,15]},{16:[1,16]},{13:17,22:18,23:$V1},{6:[1,20]},{2:[1,24],17:21,19:22,40:23,41:$V2},{14:[1,26],22:27,23:$V1},o($V3,[2,10]),{24:[1,28]},o([1,2,5],[2,5]),{18:[1,29]},{2:[1,32],20:30,40:31,41:$V2,43:[1,33]},o($V4,[2,27]),o($V4,[2,28]),{42:[1,34]},{15:[2,6]},o($V3,[2,9]),{25:[1,35]},{10:[2,7]},{2:[1,38],21:36,42:$V5,44:37},o($V4,[2,25]),o($V4,[2,26]),{42:[1,40]},{27:[1,41]},{24:$V6,26:42,28:43,29:44,30:46,31:$V7,33:45,37:$V8,38:$V9,39:$Va},{2:[1,53],18:[2,8],42:$V5,44:52},o($Vb,[2,33]),o($Vb,[2,34]),{45:[1,54]},{27:[1,55]},o($V4,[2,29]),{27:[1,56]},{27:[2,12]},{27:[2,13],30:57,31:$V7},o($Vc,[2,20],{34:[1,58],35:[1,59],36:[1,60]}),o($Vd,[2,15]),o($Ve,[2,21]),o($Ve,[2,22]),o($Ve,[2,23]),o($Ve,[2,24]),{24:$V6,28:61,33:45,37:$V8,38:$V9,39:$Va},o($Vb,[2,31]),o($Vb,[2,32]),o($Vf,[2,39],{46:62,48:63,49:64,2:$Vg,24:$Vh,42:$Vi}),o($Vj,[2,30]),o($V3,[2,11]),o($Vd,[2,14]),o($Vc,[2,17]),o($Vc,[2,18]),o($Vc,[2,19]),{32:[1,68]},{27:[1,69],47:[1,70]},o($Vf,[2,38],{49:71,2:$Vk,24:$Vh,42:$Vi}),o($Vl,$Vj),o($Vl,[2,43]),o($Vl,[2,44]),o($Vl,[2,45]),o($Vd,[2,16]),o($Vb,[2,35]),o($Vf,[2,37],{49:64,48:73,2:$Vg,24:$Vh,42:$Vi}),o($Vl,[2,40]),o($Vl,[2,41]),o($Vf,[2,36],{49:71,2:$Vk,24:$Vh,42:$Vi})],
-defaultActions: {5:[2,1],6:[2,3],7:[2,2],8:[2,4],26:[2,6],29:[2,7],43:[2,12]},
+table: [{2:$V0,3:1,4:2,6:4,7:$V1},{1:[3]},{5:[1,6]},{2:$V0,4:7,6:4,7:$V1},{2:[1,8],5:[2,3]},{8:[1,9]},{1:[2,1]},{5:[2,2]},o($V2,$V2),{9:10,12:11,13:[1,12]},{10:13,18:[1,14]},{2:[1,16],15:15,26:17,27:$V3},{14:[1,19]},{11:[1,20]},{19:[1,21]},{16:22,17:[1,24],26:23,27:$V3},o($V4,[2,7]),o($V5,[2,16]),{28:[1,25]},o($V4,[2,6]),{7:[1,26]},{2:[1,30],20:27,23:28,44:29,45:$V6},{2:[1,32],18:[2,8]},o($V5,[2,15]),o($V7,[2,9]),{29:[1,33]},o($V2,[2,4]),{21:34,22:[1,35]},{2:[1,38],24:36,44:37,45:$V6,47:[1,39]},o($V8,[2,33]),o($V8,[2,34]),{46:[1,40]},o($V7,[2,10]),{28:$V9,30:41,32:42,33:43,34:45,35:$Va,37:44,41:$Vb,42:$Vc,43:$Vd},{2:[1,51],11:$Ve},o($Ve,[2,12]),{2:[1,54],25:52,46:$Vf,48:53},o($V8,[2,31]),o($V8,[2,32]),{46:[1,56]},{31:[1,57]},{31:[1,58]},{31:$V7},{31:[2,19],34:59,35:$Va},o($Vg,[2,26],{38:[1,60],39:[1,61],40:[1,62]}),o($Vh,[2,21]),o($Vi,$V4),o($Vi,[2,28]),o($Vi,[2,29]),o($Vi,[2,30]),{28:$V9,32:63,37:44,41:$Vb,42:$Vc,43:$Vd},o($Ve,[2,13]),{2:[1,65],22:[2,14],46:$Vf,48:64},o($Vj,[2,39]),o($Vj,[2,40]),{49:[1,66]},{31:[1,67]},o($V8,[2,35]),o($V5,[2,17]),o($Vh,[2,20]),o($Vg,[2,23]),o($Vg,[2,24]),o($Vg,[2,25]),{36:[1,68]},o($Vj,[2,37]),o($Vj,[2,38]),o($Vk,[2,45],{50:69,52:70,53:71,2:$Vl,28:$Vm,46:$Vn}),o($Vo,[2,36]),o($Vh,[2,22]),{31:[1,75],51:[1,76]},o($Vk,[2,44],{53:77,2:$Vp,28:$Vm,46:$Vn}),o($Vq,[2,48]),o($Vq,[2,49]),o($Vq,[2,50]),o($Vq,[2,51]),o($Vj,[2,41]),o($Vk,[2,43],{53:71,52:79,2:$Vl,28:$Vm,46:$Vn}),o($Vq,$Vo),o($Vq,[2,47]),o($Vk,[2,42],{53:77,2:$Vp,28:$Vm,46:$Vn})],
+defaultActions: {6:[2,1],7:[2,2],42:[2,18]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -486,7 +484,7 @@ _handle_error:
     parser.parseError = function (str, hash) {
         errorManager.agregarError({
             tipo: "Sintactico",
-            lexema: hash.token || this.lexer?.yytext || "",
+            lexema: this.lexer?.yytext || hash.token || "",
             linea: (hash.loc?.first_line || 0),
             columna: (hash.loc?.first_column || 0),
             descripcion: construirDescripcionError(hash.expected)
@@ -832,57 +830,57 @@ case 3:this.popState()  /* Finalizar comentario de varias líneas */
 break;
 case 4:/* Ignorar el contenido del comentario */
 break;
-case 5:return 23
+case 5:return 27
 break;
-case 6:return 24
+case 6:return 28
 break;
-case 7:return 25
+case 7:return 29
 break;
-case 8:return 37
+case 8:return 41
 break;
-case 9:return 38
+case 9:return 42
 break;
-case 10:return 39
+case 10:return 43
 break;
-case 11:return 34
+case 11:return 38
 break;
-case 12:return 35
+case 12:return 39
 break;
-case 13:return 36;
+case 13:return 40;
 break;
-case 14:return 31
+case 14:return 35
 break;
-case 15:return 32
+case 15:return 36
 break;
-case 16:return 27
+case 16:return 31
 break;
-case 17:return 6
+case 17:return 7
 break;
-case 18:return 7
+case 18:return 8
 break;
-case 19:return 10
+case 19:return 11
 break;
-case 20:return 11
+case 20:return 13
 break;
-case 21:return 15
+case 21:return 18
 break;
-case 22:this.begin('SYNTAX'); return 16
+case 22:this.begin('SYNTAX'); return 19
 break;
-case 23:this.begin('INITIAL'); return 18
+case 23:this.begin('INITIAL'); return 22
 break;
-case 24:this.begin('LEX'); return 12
+case 24:this.begin('LEX'); return 14
 break;
-case 25:this.begin('INITIAL'); return 14
+case 25:this.begin('INITIAL'); return 17
 break;
-case 26:return 41
+case 26:return 45
 break;
-case 27:return 43
+case 27:return 47
 break;
-case 28:return 45
+case 28:return 49
 break;
-case 29:return 42
+case 29:return 46
 break;
-case 30:return 47
+case 30:return 51
 break;
 case 31:return 5
 break;

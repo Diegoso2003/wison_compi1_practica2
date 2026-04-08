@@ -107,8 +107,6 @@ export class NoTerminal {
       });
       primeros.forEach((producciones, terminal) => {
         if (!this.primeros.has(terminal)) {
-          console.log("primero terminal")
-          console.log(cadena)
           this.primeros.set(terminal, cadena);
         } else {
           creador.getErrores().push({
@@ -185,11 +183,13 @@ export class NoTerminal {
 
   public agregarProduccionesVacias(creador: Creador): void {
     this.calcularSegundosHijosRecursivo();
+    console.log("nombre simbolo: "+this.nombre)
     if(this.primerVacios.length > 0){
       this.segundos.forEach((segundo) => {
         if(!this.primeros.has(segundo)){
           this.primeros.set(segundo, this.primerVacios)
         } else {
+          console.log("segundo conflicto: " + segundo)
           creador.getErrores().push({
             tipo: "Semantico",
             linea: this.linea,
@@ -205,19 +205,17 @@ export class NoTerminal {
   }
 
   private calcularSegundosHijosRecursivo(): void {
+    console.log("padre " + this.nombre)
+    console.log("hijos")
+    console.log(this.hijos)
     this.hijos.forEach((hijo) => {
-      let cambio = false;
 
       this.segundos.forEach((segundo) => {
         if (!hijo.segundos.has(segundo)) {
           hijo.segundos.add(segundo);
-          cambio = true;
+          hijo.calcularSegundosHijosRecursivo();
         }
       });
-
-      if (cambio) {
-        hijo.calcularSegundosHijosRecursivo();
-      }
     });
   }
 

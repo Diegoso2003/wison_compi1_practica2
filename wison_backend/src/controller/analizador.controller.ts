@@ -12,3 +12,15 @@ export const analizar = async (req: Request, res: Response, next: NextFunction)=
     })
   }
 }
+
+export const obtenerTodas = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        let lista = await analizadorService.obtenerTodasGramaticas();
+        return res.json(lista)
+    } catch (error: any) {
+        res.status(500).json({
+            ok: false,
+            message: error.message || "Error al obtener gramáticas"
+        });
+    }
+};

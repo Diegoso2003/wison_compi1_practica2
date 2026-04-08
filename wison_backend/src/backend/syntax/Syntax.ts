@@ -20,19 +20,14 @@ export class Syntax{
 
     validarGramatica(creador: Creador): void{
         this.validarNoterminales(creador)
-        console.log("no terminales validados.")
         this.validarSimboloInicial(creador)
-        console.log("inicial validado")
         this.validarProducciones(creador)
-        console.log("producciones validados")
         this.tablaNoTerminales.forEach((noTerminal) => {
             noTerminal.encontrarPrimeros(creador, this.tablaNoTerminales)
         })
-        console.log("primeros calculados.")
         this.producciones.forEach((produccion) => {
             produccion.segundos(creador, this.tablaNoTerminales)
         })
-        console.log("segundos calculados")
         this.tablaNoTerminales.forEach((noTerminal) => {
             noTerminal.agregarProduccionesVacias(creador)
         })

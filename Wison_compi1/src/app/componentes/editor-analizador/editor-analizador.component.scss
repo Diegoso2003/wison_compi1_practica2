@@ -1,145 +1,188 @@
-/* ===== COLORES ===== */
-$editor-bg: #1e1e2e;
-$editor-sidebar: #181825;
-$editor-surface: #2a2a3a;
-$editor-line: #313244;
+// Estilos mejorados con texto más grande y resaltado
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
 
-$accent-primary: #7e6b9e;
-$accent-secondary: #4a9eff;
-$accent-success: #6b9e7e;
-$accent-error: #f28b82;
+// Variables personalizadas
+$editor-bg: #0d1117;
+$editor-surface: #161b22;
+$editor-accent: #7e6b9e;
+$text-highlight: #e6edf3;
+$syntax-keyword: #ff7b72;
+$syntax-string: #a5d6ff;
+$syntax-comment: #8b949e;
 
-$text-primary: #e1e1e6;
-$text-secondary: #c0c0d0;
+// Sobreescribir estilos de Bootstrap para modo oscuro
+.card {
+  background-color: $editor-surface !important;
+}
 
-$font-mono: 'Fira Code', 'JetBrains Mono', 'Cascadia Code', 'Courier New', monospace;
-$border-radius-sm: 4px;
-$border-radius-md: 8px;
-
-/* ===== TEXTAREA DEL CÓDIGO - TEXTO MÁS GRANDE ===== */
-.code-textarea {
-  width: 100%;
-  background-color: $editor-bg;
-  color: $text-primary;
-  font-family: $font-mono;
-  font-size: 16px;  /* Texto más grande */
-  line-height: 1.8; /* Más espacio entre líneas */
-  padding: 16px;
-  border: 1px solid $editor-line;
-  border-radius: $border-radius-md;
-  resize: vertical;
-  outline: none;
-  min-height: 500px;
+.form-control {
+  background-color: $editor-bg !important;
+  color: $text-highlight !important;
+  border-color: #30363d !important;
+  font-weight: 500 !important;
   
-  &:focus {
-    border-color: $accent-primary;
-    box-shadow: 0 0 0 2px rgba($accent-primary, 0.2);
+  &::placeholder {
+    color: #6e7681 !important;
+    opacity: 0.8;
+    font-size: 1.1rem;
+    font-style: italic;
   }
   
-  &.is-invalid {
-    border-color: $accent-error;
-    background-color: rgba($accent-error, 0.05);
+  &:focus {
+    background-color: lighten($editor-bg, 3%) !important;
+    border-color: $editor-accent !important;
+    box-shadow: 0 0 0 0.25rem rgba($editor-accent, 0.35) !important;
+    color: #ffffff !important;
   }
   
   &.is-valid {
-    border-color: $accent-success;
-    background-color: rgba($accent-success, 0.05);
+    border-color: #3fb950 !important;
+    border-width: 2px !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%233fb950' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e") !important;
   }
   
-  &::placeholder {
-    font-size: 16px;
-    color: $text-secondary;
+  &.is-invalid {
+    border-color: #f85149 !important;
+    border-width: 2px !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23f85149'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23f85149' stroke='none'/%3e%3c/svg%3e") !important;
   }
 }
 
-/* ===== BARRA DE ESTADO ===== */
-.editor-status-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: $editor-sidebar;
-  border: 1px solid $editor-line;
-  border-top: none;
-  padding: 10px 16px;
-  border-radius: 0 0 $border-radius-md $border-radius-md;
-  font-family: $font-mono;
-  font-size: 14px;  /* Texto más grande */
-  margin-top: -1px;
+// Estilos específicos para el textarea
+textarea.form-control {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Courier New', monospace !important;
+  font-size: 1.3rem !important;
+  line-height: 1.8 !important;
+  font-weight: 500 !important;
   
-  .status-left, .status-right {
-    display: flex;
-    gap: 20px;
+  // Resaltado de sintaxis básico (efecto visual)
+  &::selection {
+    background-color: rgba($editor-accent, 0.4) !important;
+    color: #ffffff !important;
   }
   
-  .status-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: $text-secondary;
-    font-size: 14px;
+  // Scrollbar personalizada y más grande
+  &::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #1a1f26;
+    border-radius: 8px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #7e6b9e 0%, #6b5b8a 100%);
+    border-radius: 8px;
+    border: 2px solid #1a1f26;
     
     &:hover {
-      color: $text-primary;
+      background: linear-gradient(180deg, #8b78ab 0%, #7e6b9e 100%);
     }
   }
 }
 
-/* ===== TOOLTIP PERSONALIZADO ===== */
-.invalid-tooltip {
-  position: absolute;
-  bottom: -30px;
-  left: 0;
-  background-color: $accent-error;
-  color: white;
-  padding: 6px 12px;
-  border-radius: $border-radius-sm;
-  font-size: 13px;
-  z-index: 10;
-}
-
-/* ===== ESTILOS DE LA TARJETA ===== */
-.custom-card {
-  background-color: $editor-surface;
-  border-radius: $border-radius-md;
-  padding: 1.5rem;
-}
-
-.custom-button {
-  background-color: $accent-primary;
-  color: white;
-  border: none;
-  padding: 0.75rem 2rem;
+.invalid-feedback, .valid-feedback {
+  font-size: 1rem !important;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
   border-radius: 6px;
-  font-weight: 600;
-  font-size: 16px;  /* Texto más grande */
-  transition: all 0.2s ease;
-
-  &:hover {
-    background-color: lighten($accent-primary, 10%);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(126, 107, 158, 0.3);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .editor-status-bar {
-    flex-direction: column;
-    gap: 8px;
-    align-items: flex-start;
-    
-    .status-left, .status-right {
-      width: 100%;
-      justify-content: space-between;
-    }
+.invalid-feedback {
+  color: #f85149 !important;
+  background-color: rgba(#f85149, 0.1);
+  border-left: 4px solid #f85149;
+}
+
+.valid-feedback {
+  color: #3fb950 !important;
+  background-color: rgba(#3fb950, 0.1);
+  border-left: 4px solid #3fb950;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, $editor-accent 0%, darken($editor-accent, 10%) 100%) !important;
+  border: none !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px;
+  
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, lighten($editor-accent, 5%) 0%, $editor-accent 100%) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba($editor-accent, 0.4) !important;
   }
   
-  .code-textarea {
-    font-size: 14px;
-    padding: 12px;
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Animaciones suaves
+.form-control, .btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Efecto de glow en focus
+.form-control:focus {
+  animation: glow-pulse 2s infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba($editor-accent, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba($editor-accent, 0.5);
+  }
+}
+
+// Estilos responsivos
+@media (max-width: 768px) {
+  .card {
+    width: 95% !important;
+    margin: 1rem !important;
+  }
+  
+  textarea.form-control {
+    font-size: 1.1rem !important;
+  }
+  
+  .fs-5 {
+    font-size: 1rem !important;
+  }
+}
+
+// Mejoras de contraste para el texto
+.form-label {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.3px;
+}
+
+// Efecto de línea numerada (opcional, si quieres simular números de línea)
+.code-editor-wrapper {
+  position: relative;
+  
+  &::before {
+    content: "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15";
+    position: absolute;
+    left: 10px;
+    top: 15px;
+    color: #6e7681;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.3rem;
+    line-height: 1.8;
+    text-align: right;
+    padding-right: 15px;
+    border-right: 1px solid #30363d;
+    white-space: pre;
   }
 }

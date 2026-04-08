@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Nuevo } from '../model/Nuevo';
 import { Observable } from 'rxjs';
 import { Resultado } from '../model/Resultado';
+import { GramaticaDatos } from '../model/GramaticaDatos';
 
 @Injectable({
   providedIn: 'root'
@@ -15,5 +16,10 @@ export class GramaticaService {
   crearNuevo(nuevo: Nuevo): Observable<Resultado>{
     return this._http.post<Resultado>(`${this.url}/analizar`, nuevo);
   }
+
+  obtenerTodas(): Observable<GramaticaDatos[]>{
+    return this._http.get<GramaticaDatos[]>(`${this.url}/listado`);
+  }
+
   constructor() { }
 }

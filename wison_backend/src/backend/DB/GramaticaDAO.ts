@@ -1,5 +1,6 @@
 import { conexionDB } from "./conexionDB";
 import { ModeloGramatica } from "../../model/ModeloGramatica";
+import { GramaticaDatos } from "../../model/GramaticaDatos";
 
 export class GramaticaDAO{
     async crear(nuevo: ModeloGramatica, nombre: string): Promise<number>{
@@ -10,12 +11,10 @@ export class GramaticaDAO{
         return result.insertId;
     }
 
-    async obtenerTodas(): Promise<ModeloGramatica[]> {
-        const [rows]: any = await conexionDB.query("SELECT nombre, id FROM Gramatica");
-        return rows.map((row: any) => ({
-            ...row,
-            //gramatica: JSON.parse(row.gramatica)
-        }))
+    async obtenerTodas(): Promise<GramaticaDatos[]> {
+        const [rows]: any = await conexionDB.query("SELECT nombre, id, fecha_creacion FROM Gramatica");
+        console.log(rows)
+        return rows
     }
 
     async obtenerPorId(id: number): Promise<ModeloGramatica | null>{

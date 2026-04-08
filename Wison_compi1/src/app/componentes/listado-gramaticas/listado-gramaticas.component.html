@@ -1,0 +1,73 @@
+<app-informacion></app-informacion>
+<div class="container-fluid py-4 d-flex justify-content-center">
+  <div class="w-75">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0 text-dark">
+        <i class="bi bi-collection me-2"></i>
+        Analizadores Creados
+      </h2>
+    </div>
+
+    <div class="row g-4">
+      @for(gramatica of gramaticas; track gramatica.id) {
+        <div class="col-12 col-md-6 mb-3">
+          <div class="card h-100 border-0 shadow-sm gramatica-card">
+            <div class="card-header border-0 pb-0">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <span class="badge bg-secondary bg-opacity-25 text-light mb-2">
+                    ID: {{ gramatica.id }}
+                  </span>
+                </div>
+                <div class="dropdown">
+                  <button 
+                    class="btn btn-link text-light p-0" 
+                    type="button" 
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-dark">
+                    <li>
+                      <a class="dropdown-item" href="#" (click)="$event.preventDefault(); usarAnalizador(gramatica)">
+                        <i class="bi bi-play me-2"></i>Usar
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <h5 class="card-title text-light mt-2">
+                <i class="bi bi-file-code me-2 text-primary"></i>
+                {{ gramatica.nombre }}
+              </h5>
+            </div>
+            
+            <div class="card-body">
+              <div class="gramatica-info">
+                <div class="info-item">
+                  <i class="bi bi-calendar3 me-2 text-secondary"></i>
+                  <span class="text-light">Creado:</span>
+                  <span class="text-light ms-2">{{ gramatica.fecha_creacion | date:'dd/MM/yyyy' }}</span>
+                </div>
+                <div class="info-item mt-2">
+                  <i class="bi bi-clock me-2 text-secondary"></i>
+                  <span class="text-light">Hora:</span>
+                  <span class="text-light ms-2">{{ gramatica.fecha_creacion | date:'HH:mm' }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card-footer border-0 pt-0">
+              <button 
+                class="btn btn-primary w-100" 
+                (click)="usarAnalizador(gramatica)">
+                <i class="bi bi-box-arrow-in-right me-2"></i>
+                Usar analizador
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

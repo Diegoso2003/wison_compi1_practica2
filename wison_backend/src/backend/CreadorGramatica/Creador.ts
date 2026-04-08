@@ -29,22 +29,22 @@ export class Creador {
   }
 
   validarLexer(): void{
-    for(let i = 0; i < this.reglasLexicas.length; i++){
-        let nombre: string = this.reglasLexicas[i]!.getNombre()
-        if(!this.tokens.has(nombre)){
-            this.tokens.set(nombre, this.contador++)
-            this.tabla.agregarALaTabla(nombre, this.reglasLexicas[i]!.getExpresion().obtenerExprReg(this));
-        } else {
-            this.errores.push({
-                tipo: "Semantico",
-                lexema: this.reglasLexicas[i]!.getNombre(),
-                linea: this.reglasLexicas[i]!.getLinea(),
-                columna: this.reglasLexicas[i]!.getColumna(),
-                descripcion: "token ya declarado"
-            })
-        }
+    this.reglasLexicas.forEach((regla) => {
+      let nombre: string = regla.getNombre();
+      if(!this.tokens.has(nombre)){
+        this.tokens.set(nombre, this.contador++)
+        this.tabla.agregarALaTabla(nombre, regla.getExpresion().obtenerExprReg(this));
+      } else {
+        this.errores.push({
+          tipo: "Semantico",
+          lexema: regla.getNombre(),
+          linea: regla.getLinea(),
+          columna: regla.getColumna(),
+          descripcion: "token ya declarado"
+        })
+      }
+    })
     }
-  }
 
     public existeTerminal(simbolo: Simbolo): boolean {
       if (this.tabla.existeEnTabla(simbolo.getNombre())) {

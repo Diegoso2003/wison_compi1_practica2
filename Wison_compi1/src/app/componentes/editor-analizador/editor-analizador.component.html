@@ -1,52 +1,100 @@
 <app-informacion></app-informacion>
-<div class="d-flex align-items-center justify-content-center">
-  <div class="card w-75 m-3 shadow">
-    <div class="card-body custom-card">
-      <h5 class="card-title text-center mb-3">Nuevo analizador</h5>
-      
+<div class="d-flex align-items-center justify-content-center py-2 mt-2">
+  <div class="card w-75 shadow-lg border-0">
+    <div class="card-header bg-dark text-white py-3">
+      <h5 class="card-title text-center mb-0">
+        <i class="bi bi-code-square me-2"></i>
+        Nuevo analizador
+      </h5>
+    </div>
+    
+    <div class="card-body bg-dark p-4">
       <form class="needs-validation" novalidate [formGroup]="editorForm">
-        <div class="position-relative"
-          [ngClass]="{
-            'mb-5': esAnalizadorInvalido(),
-            'mb-3': esAnalizadorValido()
-          }">
-          
-          <!-- Textarea del código -->
-          <textarea
-            #codeEditor
-            class="code-textarea form-control"
-            placeholder="Escribe tu código aquí..."
-            rows="18"
-            id="validationTooltip01"
-            formControlName="analizador"
-            [ngClass]="{
-              'is-invalid': esAnalizadorInvalido(),
-              'is-valid': esAnalizadorValido()
-            }"
-            required
-          ></textarea>
-
-          <div class="editor-status-bar">
-            <div class="status-right">
-              <span class="status-item">
-                📍 Línea: {{ lineaActual }}
-              </span>
-              <span class="status-item">
-                📐 Columna: {{ columnaActual }}
-              </span>
+        
+        <!-- Campo Nombre -->
+        <div class="mb-4">
+          <label for="nombreAnalizador" class="form-label text-light fw-semibold fs-6">
+            <i class="bi bi-pencil-square me-2"></i>
+            Nombre del analizador
+          </label>
+          <div class="position-relative">
+            <input
+              type="text"
+              class="form-control form-control-lg bg-dark text-light border-secondary"
+              id="nombreAnalizador"
+              formControlName="nombre"
+              [ngClass]="{
+                'is-invalid border-danger': esNombreInvalido(),
+                'is-valid border-success': esNombreValido()
+              }"
+              placeholder="Ej: Analizador Léxico"
+              style="font-size: 1rem; padding: 0.8rem 1rem;"
+              required
+            />
+            <div class="invalid-feedback fs-6">
+              @if(esNombreInvalido()) {
+                <i class="bi bi-exclamation-triangle me-1"></i>
+                Ingrese un nombre válido
+              }
             </div>
           </div>
+        </div>
 
-          <div class="invalid-tooltip">
-            @if(esAnalizadorInvalido()) {
-              Ingrese una entrada valida
-            }
+        <!-- Campo Código -->
+        <div class="mb-4">
+          <label for="codigoAnalizador" class="form-label text-light fw-semibold fs-6">
+            <i class="bi bi-code-slash me-2"></i>
+            Código del analizador
+          </label>
+          <div class="position-relative">
+            <textarea
+              #codeEditor
+              class="form-control bg-dark border-secondary font-monospace fw-medium"
+              id="codigoAnalizador"
+              placeholder="// Escribe tu código aquí..."
+              rows="10"
+              formControlName="analizador"
+              [ngClass]="{
+                'is-invalid border-danger': esAnalizadorInvalido(),
+                'is-valid border-success': esAnalizadorValido()
+              }"
+              style="font-size: 1rem; line-height: 1.8; resize: vertical; padding: 1.2rem; letter-spacing: 0.5px;"
+              required
+            ></textarea>
+
+            <!-- Barra de estado mejorada -->
+            <div class="d-flex justify-content-between align-items-center bg-black bg-opacity-50 p-3 text-light border border-secondary border-top-0 rounded-bottom">
+              <div class="fs-6">
+                <span class="me-4">
+                  <i class="bi bi-arrow-return-left me-2"></i>
+                  <strong>Línea:</strong> {{ lineaActual }}
+                </span>
+                <span>
+                  <i class="bi bi-arrow-right me-2"></i>
+                  <strong>Columna:</strong> {{ columnaActual }}
+                </span>
+              </div>
+            </div>
+
+            <div class="invalid-feedback fs-6">
+              @if(esAnalizadorInvalido()) {
+                <i class="bi bi-exclamation-triangle me-1"></i>
+                Ingrese una entrada válida
+              }
+            </div>
           </div>
         </div>
-        <br/>
 
-        <div class="mb-3 d-flex justify-content-center">
-          <button class="custom-button" type="button" (click)="crear()">Crear analizador</button>
+        <!-- Botón -->
+        <div class="d-grid gap-2 col-md-6 mx-auto mt-5">
+          <button 
+            class="btn btn-primary btn-lg py-3" 
+            type="button" 
+            (click)="crear()"
+            [disabled]="!editorForm.valid">
+            <i class="bi bi-play-circle me-2"></i>
+            <span class="fs-5">Crear analizador</span>
+          </button>
         </div>
       </form>
     </div>

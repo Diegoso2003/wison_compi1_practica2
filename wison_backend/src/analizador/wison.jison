@@ -60,7 +60,7 @@
     parser.parseError = function (str, hash) {
         errorManager.agregarError({
             tipo: "Sintactico",
-            lexema: hash.token || this.lexer?.yytext || "",
+            lexema: this.lexer?.yytext || hash.token || "",
             linea: (hash.loc?.first_line || 0),
             columna: (hash.loc?.first_column || 0),
             descripcion: construirDescripcionError(hash.expected)
@@ -109,7 +109,7 @@
 <SYNTAX>"No_Terminal"                      return 'NO_TERMINAL'
 <SYNTAX>"Initial_Sim"                      return 'INICIO'
 <SYNTAX>"<="                               return 'ASIGNACION'
-<SYNTAX>"%"_[a-zA-Z][a-zA-Z0-9_]*            return 'NO_TERMINAL_NOMBRE'
+<SYNTAX>"%"_[a-zA-Z][a-zA-Z0-9_]*          return 'NO_TERMINAL_NOMBRE'
 <SYNTAX>"|"                                return 'OR'
 <<EOF>>                                    return 'EOF'
 <INITIAL,LEX,SYNTAX>.                      {
@@ -127,23 +127,37 @@
 }
 
 /lex
-%start analizador
+%start gramatica
 %%
 
-analizador : wison EOF                              { $$ = $1; return $1;}
-    | error wison                                   { $$ = $2; }
-    | wison error                                   { $$ = $1; }
-    | error EOF                                     { $$ = {}; }             
+gramatica : analizador EOF                          { $$ = $1; return $1;}             
+    ;
+
+analizador : error analizador                       { $$ = $2 }
+    | wison                                         { $$ = $1}
     ;
 
 wison : WISON APERTURA lexico sintactico 
     CIERRE WISON                                    { $$ = new Creador($3, $4); }
+    | wison error                                   { $$ = $1; }
     ;
 
-lexico : LEX IN_LEX reglas_lexicas FIN_LEX          { $$ = $3 }
+inicio_lex : LEX IN_LEX
+    | inicio_lex error
     ;
 
-sintactico : SYNTAX IN_SYNTAX syntax FIN_SYNTAX     { $$ = $3 }
+lexico : inicio_lex reglas_lexicas final_lex        { $$ = $2 }
+    ;
+
+final_lex : FIN_LEX
+    | final_lex error
+    ;
+
+sintactico : SYNTAX IN_SYNTAX syntax final_syntax   { $$ = $3 }
+    ;
+
+final_syntax : FIN_SYNTAX
+    | final_syntax error
     ;
 
 syntax : no_terminales inicio producciones          { $$ = new Syntax($1, $2, $3) }

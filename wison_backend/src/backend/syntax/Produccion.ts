@@ -61,14 +61,14 @@ export class Produccion {
       noTerminal.getPrimerosSimbolos().set(p, produccion)
     } else {
       let cadena1: string = ""; produccion.forEach((i) => cadena1.concat(i.getNombre() + " "))
-      let cadena2: string = ""; 
+      let cadena2: string = "";
       noTerminal.getPrimerosSimbolos().get(p)!.forEach((i) => cadena2.concat(i.getNombre() + " "))
       creador.getErrores().push({
         tipo: "Semantico",
         linea: this.linea,
         columna: this.columna,
         lexema: this.nombre,
-        descripcion: `Conflicto entre: 
+        descripcion: `Conflicto entre:
         ${this.nombre} <= ${cadena1};
         ${this.nombre} <= ${cadena2};`
       })
@@ -108,7 +108,7 @@ export class Produccion {
         columna: simbolo.getColumna(),
         lexema: simbolo.getNombre(),
         descripcion:
-          `Conflicto entre: 
+          `Conflicto entre:
           ${noTerminal.getNombre()} <= ${noTerminal.getPrimeros().get(simbolo.getNombre())!.join(" ")};
           ${noTerminal.getNombre()} <= ${producciones.join(" ")};
           factorizar para eliminar la ambigüedad.`,
@@ -121,12 +121,15 @@ export class Produccion {
       let padre: NoTerminal = tablaNoTerminales.get(this.nombre)!
       this.listaSimbolos.forEach((simbolos) => {
         let anterior: NoTerminal | undefined
-        let vacios: NoTerminal[] = []
+        let inicioVacio: NoTerminal[] = []
+        let siguientes: string[] = []
         simbolos.forEach((simbolo) => {
-        let segundos: string[] = []
           if(simbolo.getTerminal()){
             if(simbolo.getNombre() !== "" && creador.existeTerminal(simbolo) && anterior){
-              segundos.push(simbolo.getNombre())
+              if(anterior){
+                siguientes.push(simbolo.getNombre())
+                anterior.getSegundos().add(simbolo.getNombre())
+              }
             }
             anterior = undefined
           } else {
@@ -135,10 +138,8 @@ export class Produccion {
               if(anterior){
                 let primeros:Map<string, string[]> = noTerminal.getPrimeros()
                 primeros.forEach((producciones, terminal) => {
-                  if(!anterior!.getSegundos().has(terminal)){
-                    anterior?.getSegundos().add(terminal)
-                  }
-                  segundos.push(terminal)
+                  siguientes.push(terminal)
+                  anterior?.getSegundos().add(terminal)
                 })
               }
               anterior = noTerminal;
@@ -146,23 +147,25 @@ export class Produccion {
               anterior = undefined
             }
           }
-          vacios.forEach((noTerminal) => {
-            segundos.forEach((segundo) => {
-              noTerminal.getSegundos().add(segundo)
+          inicioVacio.forEach((vacio) => {
+            siguientes.forEach((siguiente) => {
+              vacio.getSegundos().add(siguiente)
             })
           })
-          if(!anterior || anterior.getPrimerVacios().length === 0){
-            vacios = []
-          } else {
-            vacios.push(anterior)
+          if(!anterior){
+            inicioVacio = []
+          } else if (anterior.getPrimerVacios().length === 0){
+            inicioVacio = [anterior]
+          } else{
+            inicioVacio.push(anterior)
           }
         })
         if(anterior){
           padre.agregarHijo(anterior)
-          vacios.forEach((noTerminal) => {
-            padre.agregarHijo(noTerminal)
-          })
         }
+        inicioVacio.forEach((vacio) => {
+          padre.agregarHijo(vacio)
+        })
       })
     }
   }

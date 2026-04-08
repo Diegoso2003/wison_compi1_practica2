@@ -28,7 +28,8 @@ export class EditorAnalizadorComponent implements AfterViewInit {
   
   constructor(private formBuilder: FormBuilder){
     this.editorForm = this.formBuilder.group({
-      analizador: ['', Validators.pattern(/^(?!\s*$).+/)]
+      analizador: ['', Validators.required],
+      nombre: ['', [Validators.required, Validators.pattern(/^(?!\s*$).+/)]]
     });
     this._validador = new Validador(this.editorForm);
   }
@@ -65,14 +66,17 @@ export class EditorAnalizadorComponent implements AfterViewInit {
     return this._validador.tieneError('analizador')
   }
 
+  esNombreInvalido(){
+    return this._validador.tieneError('nombre')
+  }
+
+  esNombreValido(){
+    return this._validador.esValido('nombre');
+  }
+
   crear(){
     if(this.editorForm.valid){
-      let nombre: string = localStorage.getItem('nombre') || 'analizador_nuevo';
-      let analizador: string = this.editorForm.get('analizador')?.value
-      let nuevo: Nuevo = {
-        nombre: nombre,
-        analizador: analizador
-      }
+      let nuevo: Nuevo = this.editorForm.value as Nuevo
       this._gramatica.crearNuevo(nuevo).subscribe({
         next: (resultado: Resultado) => {
           if(resultado.ok){
