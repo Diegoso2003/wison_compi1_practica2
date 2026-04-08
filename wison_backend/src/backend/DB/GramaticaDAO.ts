@@ -13,7 +13,6 @@ export class GramaticaDAO{
 
     async obtenerTodas(): Promise<GramaticaDatos[]> {
         const [rows]: any = await conexionDB.query("SELECT nombre, id, fecha_creacion FROM Gramatica");
-        console.log(rows)
         return rows
     }
 
