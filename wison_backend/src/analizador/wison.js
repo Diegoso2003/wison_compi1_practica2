@@ -73,12 +73,12 @@
 */
 // @ts-nocheck
 var wison = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,3],$V1=[1,5],$V2=[2,5],$V3=[1,18],$V4=[2,27],$V5=[17,27],$V6=[1,31],$V7=[2,18],$V8=[2,45,47],$V9=[1,49],$Va=[1,50],$Vb=[1,46],$Vc=[1,47],$Vd=[1,48],$Ve=[2,11],$Vf=[1,55],$Vg=[31,36],$Vh=[31,35],$Vi=[31,36,38,39,40],$Vj=[2,22,46],$Vk=[31,51],$Vl=[1,72],$Vm=[1,74],$Vn=[1,73],$Vo=[2,46],$Vp=[1,78],$Vq=[2,28,31,46,51];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,3],$V1=[1,5],$V2=[2,5],$V3=[1,18],$V4=[2,27],$V5=[17,27],$V6=[1,31],$V7=[2,18],$V8=[2,45,47],$V9=[1,50],$Va=[1,49],$Vb=[1,51],$Vc=[1,46],$Vd=[1,47],$Ve=[1,48],$Vf=[2,11],$Vg=[1,56],$Vh=[31,36],$Vi=[31,35],$Vj=[31,36,38,39,40],$Vk=[2,22,46],$Vl=[31,51],$Vm=[2,46],$Vn=[1,73],$Vo=[1,75],$Vp=[1,74],$Vq=[1,79],$Vr=[2,28,31,46,51];
 var parser = {trace: function trace () { },
 yy: {},
 symbols_: {"error":2,"gramatica":3,"analizador":4,"EOF":5,"wison":6,"WISON":7,"APERTURA":8,"lexico":9,"sintactico":10,"CIERRE":11,"inicio_lex":12,"LEX":13,"IN_LEX":14,"reglas_lexicas":15,"final_lex":16,"FIN_LEX":17,"SYNTAX":18,"IN_SYNTAX":19,"syntax":20,"final_syntax":21,"FIN_SYNTAX":22,"no_terminales":23,"inicio":24,"producciones":25,"regla_lexica":26,"TERMINAL":27,"TERMINAL_NOMBRE":28,"FLECHA":29,"expr":30,"P_COMA":31,"unario":32,"combinado":33,"concatenacion":34,"PAREN_IZQ":35,"PAREN_DER":36,"simple":37,"KLEENE":38,"POSITIVO":39,"OPCIONAL":40,"CADENA":41,"LETRAS":42,"DIGITOS":43,"no_terminal":44,"NO_TERMINAL":45,"NO_TERMINAL_NOMBRE":46,"INICIO":47,"produccion":48,"ASIGNACION":49,"reglas":50,"OR":51,"listaSimbolos":52,"simbolo":53,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"EOF",7:"WISON",8:"APERTURA",11:"CIERRE",13:"LEX",14:"IN_LEX",17:"FIN_LEX",18:"SYNTAX",19:"IN_SYNTAX",22:"FIN_SYNTAX",27:"TERMINAL",28:"TERMINAL_NOMBRE",29:"FLECHA",31:"P_COMA",35:"PAREN_IZQ",36:"PAREN_DER",38:"KLEENE",39:"POSITIVO",40:"OPCIONAL",41:"CADENA",42:"LETRAS",43:"DIGITOS",45:"NO_TERMINAL",46:"NO_TERMINAL_NOMBRE",47:"INICIO",49:"ASIGNACION",51:"OR"},
-productions_: [0,[3,2],[4,2],[4,1],[6,6],[6,2],[12,2],[12,2],[9,3],[16,1],[16,2],[10,4],[21,1],[21,2],[20,3],[15,2],[15,1],[26,5],[30,1],[30,1],[33,2],[33,1],[34,3],[32,2],[32,2],[32,2],[32,1],[37,1],[37,1],[37,1],[37,1],[23,2],[23,2],[23,1],[23,1],[44,3],[24,3],[25,2],[25,2],[25,1],[25,1],[48,4],[50,3],[50,2],[50,1],[50,0],[52,2],[52,2],[52,1],[52,1],[53,1],[53,1]],
+productions_: [0,[3,2],[4,2],[4,1],[6,6],[6,2],[12,2],[12,2],[9,3],[16,1],[16,2],[10,4],[21,1],[21,2],[20,3],[15,2],[15,1],[26,5],[30,1],[30,1],[33,2],[33,1],[34,3],[32,2],[32,2],[32,2],[32,1],[37,1],[37,1],[37,1],[37,1],[37,1],[23,2],[23,2],[23,1],[23,1],[44,3],[24,3],[25,2],[25,2],[25,1],[25,1],[48,4],[50,3],[50,2],[50,1],[50,0],[52,2],[52,2],[52,1],[52,1],[53,1],[53,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -96,16 +96,16 @@ break;
 case 4:
  this.$ = new Creador($$[$0-3], $$[$0-2]); 
 break;
-case 5: case 32:
+case 5: case 33:
  this.$ = $$[$0-1]; 
 break;
-case 8: case 11: case 22: case 38: case 47:
+case 8: case 11: case 22: case 39: case 48:
  this.$ = $$[$0-1] 
 break;
 case 14:
  this.$ = new Syntax($$[$0-2], $$[$0-1], $$[$0]) 
 break;
-case 15: case 31: case 37: case 46:
+case 15: case 32: case 38: case 47:
  this.$ = $$[$0-1]; $$[$0-1].push($$[$0]) 
 break;
 case 16:
@@ -141,39 +141,42 @@ break;
 case 30:
  this.$ = new IdentiExpresion($$[$0], _$[$0].first_line, _$[$0].first_column) 
 break;
-case 33: case 39: case 44: case 48:
+case 31:
+ this.$ = new Cadena("error") 
+break;
+case 34: case 40: case 45: case 49:
  this.$ = [$$[$0]] 
 break;
-case 34: case 40: case 49:
+case 35: case 41: case 50:
  this.$ = [] 
 break;
-case 35:
+case 36:
  this.$ = new NoTerminal($$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column) 
 break;
-case 36:
+case 37:
  this.$ = new Inicial($$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column) 
 break;
-case 41:
+case 42:
  this.$ = new Produccion($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column) 
 break;
-case 42:
+case 43:
  this.$ = $$[$0-2]; $$[$0-2].push($$[$0]) 
 break;
-case 43:
+case 44:
  this.$ = $$[$0-1]; $$[$0-1].push([new Simbolo("", this._$.first_line, this._$.first_column, true)]) 
 break;
-case 45:
+case 46:
  this.$ = [[new Simbolo("", this._$.first_line, this._$.first_column, true)]] 
 break;
-case 50:
+case 51:
  this.$ = new Simbolo($$[$0], _$[$0].first_line, _$[$0].first_column, false) 
 break;
-case 51:
+case 52:
  this.$ = new Simbolo($$[$0], _$[$0].first_line, _$[$0].first_column, true) 
 break;
 }
 },
-table: [{2:$V0,3:1,4:2,6:4,7:$V1},{1:[3]},{5:[1,6]},{2:$V0,4:7,6:4,7:$V1},{2:[1,8],5:[2,3]},{8:[1,9]},{1:[2,1]},{5:[2,2]},o($V2,$V2),{9:10,12:11,13:[1,12]},{10:13,18:[1,14]},{2:[1,16],15:15,26:17,27:$V3},{14:[1,19]},{11:[1,20]},{19:[1,21]},{16:22,17:[1,24],26:23,27:$V3},o($V4,[2,7]),o($V5,[2,16]),{28:[1,25]},o($V4,[2,6]),{7:[1,26]},{2:[1,30],20:27,23:28,44:29,45:$V6},{2:[1,32],18:[2,8]},o($V5,[2,15]),o($V7,[2,9]),{29:[1,33]},o($V2,[2,4]),{21:34,22:[1,35]},{2:[1,38],24:36,44:37,45:$V6,47:[1,39]},o($V8,[2,33]),o($V8,[2,34]),{46:[1,40]},o($V7,[2,10]),{28:$V9,30:41,32:42,33:43,34:45,35:$Va,37:44,41:$Vb,42:$Vc,43:$Vd},{2:[1,51],11:$Ve},o($Ve,[2,12]),{2:[1,54],25:52,46:$Vf,48:53},o($V8,[2,31]),o($V8,[2,32]),{46:[1,56]},{31:[1,57]},{31:[1,58]},{31:$V7},{31:[2,19],34:59,35:$Va},o($Vg,[2,26],{38:[1,60],39:[1,61],40:[1,62]}),o($Vh,[2,21]),o($Vi,$V4),o($Vi,[2,28]),o($Vi,[2,29]),o($Vi,[2,30]),{28:$V9,32:63,37:44,41:$Vb,42:$Vc,43:$Vd},o($Ve,[2,13]),{2:[1,65],22:[2,14],46:$Vf,48:64},o($Vj,[2,39]),o($Vj,[2,40]),{49:[1,66]},{31:[1,67]},o($V8,[2,35]),o($V5,[2,17]),o($Vh,[2,20]),o($Vg,[2,23]),o($Vg,[2,24]),o($Vg,[2,25]),{36:[1,68]},o($Vj,[2,37]),o($Vj,[2,38]),o($Vk,[2,45],{50:69,52:70,53:71,2:$Vl,28:$Vm,46:$Vn}),o($Vo,[2,36]),o($Vh,[2,22]),{31:[1,75],51:[1,76]},o($Vk,[2,44],{53:77,2:$Vp,28:$Vm,46:$Vn}),o($Vq,[2,48]),o($Vq,[2,49]),o($Vq,[2,50]),o($Vq,[2,51]),o($Vj,[2,41]),o($Vk,[2,43],{53:71,52:79,2:$Vl,28:$Vm,46:$Vn}),o($Vq,$Vo),o($Vq,[2,47]),o($Vk,[2,42],{53:77,2:$Vp,28:$Vm,46:$Vn})],
+table: [{2:$V0,3:1,4:2,6:4,7:$V1},{1:[3]},{5:[1,6]},{2:$V0,4:7,6:4,7:$V1},{2:[1,8],5:[2,3]},{8:[1,9]},{1:[2,1]},{5:[2,2]},o($V2,$V2),{9:10,12:11,13:[1,12]},{10:13,18:[1,14]},{2:[1,16],15:15,26:17,27:$V3},{14:[1,19]},{11:[1,20]},{19:[1,21]},{16:22,17:[1,24],26:23,27:$V3},o($V4,[2,7]),o($V5,[2,16]),{28:[1,25]},o($V4,[2,6]),{7:[1,26]},{2:[1,30],20:27,23:28,44:29,45:$V6},{2:[1,32],18:[2,8]},o($V5,[2,15]),o($V7,[2,9]),{29:[1,33]},o($V2,[2,4]),{21:34,22:[1,35]},{2:[1,38],24:36,44:37,45:$V6,47:[1,39]},o($V8,[2,34]),o($V8,[2,35]),{46:[1,40]},o($V7,[2,10]),{2:$V9,28:$Va,30:41,32:42,33:43,34:45,35:$Vb,37:44,41:$Vc,42:$Vd,43:$Ve},{2:[1,52],11:$Vf},o($Vf,[2,12]),{2:[1,55],25:53,46:$Vg,48:54},o($V8,[2,32]),o($V8,[2,33]),{46:[1,57]},{31:[1,58]},{31:[1,59]},{31:$V7},{31:[2,19],34:60,35:$Vb},o($Vh,[2,26],{38:[1,61],39:[1,62],40:[1,63]}),o($Vi,[2,21]),o($Vj,$V4),o($Vj,[2,28]),o($Vj,[2,29]),o($Vj,[2,30]),o($Vj,[2,31]),{2:$V9,28:$Va,32:64,37:44,41:$Vc,42:$Vd,43:$Ve},o($Vf,[2,13]),{2:[1,66],22:[2,14],46:$Vg,48:65},o($Vk,[2,40]),o($Vk,[2,41]),{49:[1,67]},{31:[1,68]},o($V8,[2,36]),o($V5,[2,17]),o($Vi,[2,20]),o($Vh,[2,23]),o($Vh,[2,24]),o($Vh,[2,25]),{36:[1,69]},o($Vk,[2,38]),o($Vk,[2,39]),o($Vl,$Vm,{50:70,52:71,53:72,2:$Vn,28:$Vo,46:$Vp}),o($Vm,[2,37]),o($Vi,[2,22]),{31:[1,76],51:[1,77]},o($Vl,[2,45],{53:78,2:$Vq,28:$Vo,46:$Vp}),o($Vr,[2,49]),o($Vr,[2,50]),o($Vr,[2,51]),o($Vr,[2,52]),o($Vk,[2,42]),o($Vl,[2,44],{53:72,52:80,2:$Vn,28:$Vo,46:$Vp}),o($Vr,[2,47]),o($Vr,[2,48]),o($Vl,[2,43],{53:78,2:$Vq,28:$Vo,46:$Vp})],
 defaultActions: {6:[2,1],7:[2,2],42:[2,18]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -443,32 +446,32 @@ _handle_error:
 
     function traducirToken(token) {
         switch(token) {
-            case "P_COMA": return ";";
-            case "FLECHA": return "<-";
-            case "ASIGNACION": return "<=";
-            case "OR": return "|";
-            case "PAREN_IZQ": return "(";
-            case "PAREN_DER": return ")";
-            case "KLEENE": return "*";
-            case "POSITIVO": return "+";
-            case "OPCIONAL": return "?";
-            case "TERMINAL": return "Terminal";
-            case "LEX": return "Lex";
-            case "SYNTAX": return "Syntax";
-            case "WISON": return "Wison";
-            case "IN_LEX": return "{:";
-            case "FIN_LEX": return ":}";
-            case "IN_SYNTAX": return "{{:";
-            case "FIN_SYNTAX": return ":}}";
-            case "APERTURA": return "¿";
-            case "CIERRE": return "?";
-            case "NO_TERMINAL": return "No_Terminal";
-            case "INICIO": return "Initial_Sim";
-            case "TERMINAL_NOMBRE": return "$_NOMBRE";
-            case "NO_TERMINAL_NOMBRE": return "%_NOMBRE";
-            case "CADENA": return "palabra reservada";
-            case "LETRAS": return "[a-zA-Z]";
-            case "DIGITOS": return "[0-9]";
+            case "'P_COMA'": return "';'";
+            case "'FLECHA'": return "'<-'";
+            case "'ASIGNACION'": return "'<='";
+            case "'OR'": return "'|'";
+            case "'PAREN_IZQ'": return "'('";
+            case "'PAREN_DER'": return "')'";
+            case "'KLEENE'": return "'*'";
+            case "'POSITIVO'": return "'+'";
+            case "'OPCIONAL'": return "'?'";
+            case "'TERMINAL'": return "'Terminal'";
+            case "'LEX'": return "'Lex'";
+            case "'SYNTAX'": return "'Syntax'";
+            case "'WISON'": return "'Wison'";
+            case "'IN_LEX'": return "'{:'";
+            case "'FIN_LEX'": return "':}'";
+            case "'IN_SYNTAX'": return "'{{:'";
+            case "'FIN_SYNTAX'": return "':}}'";
+            case "'APERTURA'": return "'¿'";
+            case "'CIERRE'": return "'?'";
+            case "'NO_TERMINAL'": return "'No_Terminal'";
+            case "'INICIO'": return "'Initial_Sim'";
+            case "'TERMINAL_NOMBRE'": return "'$_NOMBRE'";
+            case "'NO_TERMINAL_NOMBRE'": return "'%_NOMBRE'";
+            case "'CADENA'": return "'palabra reservada'";
+            case "'LETRAS'": return "'[a-zA-Z]'";
+            case "'DIGITOS'": return "'[0-9]'";
             default: return token;
         }
     }
@@ -484,7 +487,7 @@ _handle_error:
     parser.parseError = function (str, hash) {
         errorManager.agregarError({
             tipo: "Sintactico",
-            lexema: this.lexer?.yytext || hash.token || "",
+            lexema: hash.text,
             linea: (hash.loc?.first_line || 0),
             columna: (hash.loc?.first_column || 0),
             descripcion: construirDescripcionError(hash.expected)
@@ -902,7 +905,7 @@ case 33:console.log(yy_.yytext);
 break;
 }
 },
-rules: [/^(?:#[^\n]*)/,/^(?:[ \t\r\n]+)/,/^(?:\/\*\*)/,/^(?:\*\/)/,/^(?:(.|\n))/,/^(?:Terminal)/,/^(?:\$_[a-zA-Z][a-zA-Z0-9_]*)/,/^(?:<-)/,/^(?:'[^ \t\r\n']+')/,/^(?:\[aA-zZ\])/,/^(?:\[0-9\])/,/^(?:\*)/,/^(?:\+)/,/^(?:\?)/,/^(?:\()/,/^(?:\))/,/^(?:;)/,/^(?:Wison)/,/^(?:¿)/,/^(?:\?)/,/^(?:Lex)/,/^(?:Syntax)/,/^(?:\{\{:)/,/^(?::\}\})/,/^(?:\{:)/,/^(?::\})/,/^(?:No_Terminal)/,/^(?:Initial_Sim)/,/^(?:<=)/,/^(?:%_[a-zA-Z][a-zA-Z0-9_]*)/,/^(?:\|)/,/^(?:$)/,/^(?:.)/,/^(?:.)/],
+rules: [/^(?:#[^\n]*)/,/^(?:\s+)/,/^(?:\/\*\*)/,/^(?:\*\/)/,/^(?:(.|\n))/,/^(?:Terminal)/,/^(?:\$_[a-zA-Z][a-zA-Z0-9_]*)/,/^(?:<-)/,/^(?:'[^ \t\r\n']+'|"[^ \t\r\n\"]+")/,/^(?:\[aA-zZ\])/,/^(?:\[0-9\])/,/^(?:\*)/,/^(?:\+)/,/^(?:\?)/,/^(?:\()/,/^(?:\))/,/^(?:;)/,/^(?:Wison)/,/^(?:¿)/,/^(?:\?)/,/^(?:Lex)/,/^(?:Syntax)/,/^(?:\{\{:)/,/^(?::\}\})/,/^(?:\{:)/,/^(?::\})/,/^(?:No_Terminal)/,/^(?:Initial_Sim)/,/^(?:<=)/,/^(?:%_[a-zA-Z][a-zA-Z0-9_]*)/,/^(?:\|)/,/^(?:$)/,/^(?:.)/,/^(?:.)/],
 conditions: {"SYNTAX":{"rules":[0,1,2,6,16,23,26,27,28,29,30,32],"inclusive":false},"LEX":{"rules":[0,1,2,5,6,7,8,9,10,11,12,13,14,15,16,25,32],"inclusive":false},"COMENTARIO":{"rules":[3,4],"inclusive":false},"INITIAL":{"rules":[0,1,2,17,18,19,20,21,22,24,31,32,33],"inclusive":true}}
 });
 return lexer;

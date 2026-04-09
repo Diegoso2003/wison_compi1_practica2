@@ -19,32 +19,32 @@
 
     function traducirToken(token) {
         switch(token) {
-            case "P_COMA": return ";";
-            case "FLECHA": return "<-";
-            case "ASIGNACION": return "<=";
-            case "OR": return "|";
-            case "PAREN_IZQ": return "(";
-            case "PAREN_DER": return ")";
-            case "KLEENE": return "*";
-            case "POSITIVO": return "+";
-            case "OPCIONAL": return "?";
-            case "TERMINAL": return "Terminal";
-            case "LEX": return "Lex";
-            case "SYNTAX": return "Syntax";
-            case "WISON": return "Wison";
-            case "IN_LEX": return "{:";
-            case "FIN_LEX": return ":}";
-            case "IN_SYNTAX": return "{{:";
-            case "FIN_SYNTAX": return ":}}";
-            case "APERTURA": return "¿";
-            case "CIERRE": return "?";
-            case "NO_TERMINAL": return "No_Terminal";
-            case "INICIO": return "Initial_Sim";
-            case "TERMINAL_NOMBRE": return "$_NOMBRE";
-            case "NO_TERMINAL_NOMBRE": return "%_NOMBRE";
-            case "CADENA": return "palabra reservada";
-            case "LETRAS": return "[a-zA-Z]";
-            case "DIGITOS": return "[0-9]";
+            case "'P_COMA'": return "';'";
+            case "'FLECHA'": return "'<-'";
+            case "'ASIGNACION'": return "'<='";
+            case "'OR'": return "'|'";
+            case "'PAREN_IZQ'": return "'('";
+            case "'PAREN_DER'": return "')'";
+            case "'KLEENE'": return "'*'";
+            case "'POSITIVO'": return "'+'";
+            case "'OPCIONAL'": return "'?'";
+            case "'TERMINAL'": return "'Terminal'";
+            case "'LEX'": return "'Lex'";
+            case "'SYNTAX'": return "'Syntax'";
+            case "'WISON'": return "'Wison'";
+            case "'IN_LEX'": return "'{:'";
+            case "'FIN_LEX'": return "':}'";
+            case "'IN_SYNTAX'": return "'{{:'";
+            case "'FIN_SYNTAX'": return "':}}'";
+            case "'APERTURA'": return "'¿'";
+            case "'CIERRE'": return "'?'";
+            case "'NO_TERMINAL'": return "'No_Terminal'";
+            case "'INICIO'": return "'Initial_Sim'";
+            case "'TERMINAL_NOMBRE'": return "'$_NOMBRE'";
+            case "'NO_TERMINAL_NOMBRE'": return "'%_NOMBRE'";
+            case "'CADENA'": return "'palabra reservada'";
+            case "'LETRAS'": return "'[a-zA-Z]'";
+            case "'DIGITOS'": return "'[0-9]'";
             default: return token;
         }
     }
@@ -60,7 +60,7 @@
     parser.parseError = function (str, hash) {
         errorManager.agregarError({
             tipo: "Sintactico",
-            lexema: this.lexer?.yytext || hash.token || "",
+            lexema: hash.text,
             linea: (hash.loc?.first_line || 0),
             columna: (hash.loc?.first_column || 0),
             descripcion: construirDescripcionError(hash.expected)
@@ -81,14 +81,14 @@
 
 %%
 <INITIAL,LEX,SYNTAX>\#[^\n]*               /* Ignorar comentarios de una línea */
-<INITIAL,LEX,SYNTAX>[ \t\r\n]+             /* Ignorar espacios en blanco */
+<INITIAL,LEX,SYNTAX>\s+             /* Ignorar espacios en blanco */
 <INITIAL,LEX,SYNTAX>\/\*\*                 this.begin('COMENTARIO')  /* Iniciar comentario de varias líneas */
 <COMENTARIO>\*\/                           this.popState()  /* Finalizar comentario de varias líneas */
 <COMENTARIO>(.|\n)                         /* Ignorar el contenido del comentario */
 <LEX>"Terminal"                            return 'TERMINAL'
 <LEX,SYNTAX>\$_[a-zA-Z][a-zA-Z0-9_]*       return 'TERMINAL_NOMBRE'
 <LEX>"<-"                                  return 'FLECHA'
-<LEX>"'"[^ \t\r\n']+"'"                    return 'CADENA'
+<LEX>"'"[^ \t\r\n']+"'"|\"[^ \t\r\n\"]+\"  return 'CADENA'
 <LEX>"[aA-zZ]"                             return 'LETRAS'
 <LEX>"[0-9]"                               return 'DIGITOS'
 <LEX>\*                                    return 'KLEENE'
@@ -192,6 +192,7 @@ simple : CADENA                                     { $$ = new Cadena($1) }
     | LETRAS                                        { $$ = new Secuencia("[a-zA-ZñÑ]") }
     | DIGITOS                                       { $$ = new Secuencia($1) }
     | TERMINAL_NOMBRE                               { $$ = new IdentiExpresion($1, @1.first_line, @1.first_column) }
+    | error                                         { $$ = new Cadena("error") }
     ;
 
 no_terminales : no_terminales no_terminal           { $$ = $1; $1.push($2) }

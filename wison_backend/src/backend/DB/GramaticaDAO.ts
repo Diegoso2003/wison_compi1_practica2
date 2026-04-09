@@ -18,14 +18,10 @@ export class GramaticaDAO{
 
     async obtenerPorId(id: number): Promise<ModeloGramatica | null>{
         const [rows]: any = await conexionDB.query(
-            "SELECT * FROM Gramatica WHERE id = ?",
+            "SELECT gramatica FROM Gramatica WHERE id = ?",
             [id]
         )
         if(rows.length === 0) return null;
-
-        return{
-            ...rows[0],
-            //gramatica: JSON.parse(rows[0].gramatica)
-        }
+        return rows[0].gramatica
     }
 }

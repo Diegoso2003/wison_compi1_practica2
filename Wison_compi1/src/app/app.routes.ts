@@ -12,6 +12,11 @@ export const routes: Routes = [
         loadComponent: () => import('./componentes/listado-gramaticas/listado-gramaticas.component').then(m => m.ListadoGramaticasComponent)
     },
     {
+        path: 'analizador/:id',
+        title: 'Wison',
+        loadComponent: () => import('./componentes/entrada-arbol/entrada-arbol.component').then(m => m.EntradaArbolComponent)
+    },
+    {
         path: '',
         redirectTo: 'wison',
         pathMatch: 'full'

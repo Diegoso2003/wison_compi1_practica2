@@ -24,3 +24,16 @@ export const obtenerTodas = async (req: Request, res: Response, next: NextFuncti
         });
     }
 };
+
+export const arbolGramatica = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    let arbol = await analizadorService.construirArbol(req.body)
+    return res.json(arbol)
+  } catch (error: any) {
+    console.log(error)
+    res.status(500).json({
+      ok: false,
+      message: error.message || "Error al obtener gramáticas"
+    });
+  }
+}

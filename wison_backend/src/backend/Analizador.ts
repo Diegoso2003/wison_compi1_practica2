@@ -10,9 +10,9 @@ export class Analizador {
 
     async analizar(input: Entrada): Promise<any> {
         
+        const erroM = ErrorM.getInstance()
         try {
             let parser = require('../analizador/wison.js');
-            const erroM = ErrorM.getInstance()
             erroM.clear()
             if(input.analizador.length === 0 || input.nombre.length === 0){
                 return {
@@ -44,7 +44,7 @@ export class Analizador {
             };
         } catch (error: any) {
             console.log(error)
-            const erroresParser:MensajeError[] = []
+            const erroresParser:MensajeError[] = erroM.getErrores()
             
             return {
                 ok: false,

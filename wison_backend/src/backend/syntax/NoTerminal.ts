@@ -10,7 +10,7 @@ export class NoTerminal {
   private segundosPosibles: Set<NoTerminal> = new Set();
   private primeros: Map<string, string[]> = new Map();
   private segundos: Set<string> = new Set();
-  private primerVacios: string[] = [];
+  private primerVacios: Simbolo | undefined;
   private hijos: Set<NoTerminal> = new Set();
 
   constructor(nombre: string, linea: number, columna: number) {
@@ -48,22 +48,21 @@ export class NoTerminal {
   }
 
   public agregarProduccionVacio(
-    produccion: string[],
     creador: Creador,
     simbolo: Simbolo,
   ) {
-    if (this.primerVacios.length === 0) {
-      this.primerVacios = produccion;
-    } else {
+    if (this.primerVacios) {
       creador.getErrores().push({
         tipo: "Semantico",
         linea: simbolo.getLinea(),
         columna: simbolo.getColumna(),
-        lexema: simbolo.getNombre(),
+        lexema: this.nombre,
         descripcion: `Conflicto con:
-          ${this.nombre} <= ${this.primerVacios.join(" ")};
-          ${this.nombre} <= ${produccion.join(" ")};`,
+          ${this.nombre} <=  ;
+          ${this.nombre} <=  ;`,
       });
+    } else {
+      this.primerVacios = simbolo
     }
   }
 
@@ -100,7 +99,6 @@ export class NoTerminal {
         creador,
         tablaNoTerminales,
       );
-      this.contadorPrimeros = 0;
       let cadena: string[] = [];
       produccion.forEach((simbolo) => {
             cadena.push(simbolo.getNombre());
@@ -114,13 +112,13 @@ export class NoTerminal {
             linea: simbolo.linea,
             columna: simbolo.columna,
             lexema: simbolo.nombre,
-            descripcion: `Conflicto entre:
+            descripcion: `Conflicto sobre el terminal ${terminal} entre:
                     ${this.nombre} <= ${cadena.join(" ")};
                     ${simbolo.nombre} <= ${producciones.join(" ")};`,
           });
         }
       });
-      if (simbolo.primerVacios.length > 0) {
+      if (simbolo.primerVacios) {
         let buscar = true;
         for (let i = 1; i<produccion.length && buscar; i++) {
           if (produccion[i]!.getTerminal()) {
@@ -163,7 +161,7 @@ export class NoTerminal {
                   });
                 } else {
                   this.primeros.set(interes, cadena)
-                  buscar = noT.primerVacios.length > 0
+                  buscar = noT.primerVacios !== undefined
                 }
               });
             } else {
@@ -173,31 +171,30 @@ export class NoTerminal {
         }
       }
     });
+    this.contadorPrimeros = 0;
     this.primerosSimbolos.clear();
     return this.primeros;
   }
 
-  public getPrimerVacios(): string[] {
+  public getPrimerVacios(): Simbolo | undefined {
     return this.primerVacios;
   }
 
   public agregarProduccionesVacias(creador: Creador): void {
     this.calcularSegundosHijosRecursivo();
-    console.log("nombre simbolo: "+this.nombre)
-    if(this.primerVacios.length > 0){
+    if(this.primerVacios){
       this.segundos.forEach((segundo) => {
         if(!this.primeros.has(segundo)){
-          this.primeros.set(segundo, this.primerVacios)
+          this.primeros.set(segundo, [])
         } else {
-          console.log("segundo conflicto: " + segundo)
           creador.getErrores().push({
             tipo: "Semantico",
-            linea: this.linea,
-            columna: this.columna,
+            linea: this.primerVacios!.getLinea(),
+            columna: this.primerVacios!.getColumna(),
             lexema: this.nombre,
-            descripcion: `Conflicto entre: 
-            ${this.nombre} <= ${this.primeros.get(segundo)!.join(" ")}
-            ${this.nombre} <= ${this.primerVacios.join(" ")}`
+            descripcion: `Conflicto sobre el terminal ${segundo} entre: 
+            ${this.nombre} <= ${this.primeros.get(segundo)!.join(" ")};
+            ${this.nombre} <=  ;`
           })
         }
       })
@@ -205,11 +202,7 @@ export class NoTerminal {
   }
 
   private calcularSegundosHijosRecursivo(): void {
-    console.log("padre " + this.nombre)
-    console.log("hijos")
-    console.log(this.hijos)
     this.hijos.forEach((hijo) => {
-
       this.segundos.forEach((segundo) => {
         if (!hijo.segundos.has(segundo)) {
           hijo.segundos.add(segundo);

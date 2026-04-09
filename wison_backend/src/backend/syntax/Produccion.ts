@@ -33,7 +33,7 @@ export class Produccion {
           let p: Simbolo = produccion[0]!
         if (p.getTerminal()) {
             if(p.getNombre() === ""){
-                noTerminal.agregarProduccionVacio(producciones, creador, p)
+                noTerminal.agregarProduccionVacio(creador, p)
             } else if (creador.existeTerminal(p)) {
                 this.agregarPrimeroTerminal(creador, p, noTerminal, producciones);
             }
@@ -108,7 +108,7 @@ export class Produccion {
         columna: simbolo.getColumna(),
         lexema: simbolo.getNombre(),
         descripcion:
-          `Conflicto entre:
+          `Conflicto sobre el terminal ${simbolo.getNombre()} entre:
           ${noTerminal.getNombre()} <= ${noTerminal.getPrimeros().get(simbolo.getNombre())!.join(" ")};
           ${noTerminal.getNombre()} <= ${producciones.join(" ")};
           factorizar para eliminar la ambigüedad.`,
@@ -154,7 +154,7 @@ export class Produccion {
           })
           if(!anterior){
             inicioVacio = []
-          } else if (anterior.getPrimerVacios().length === 0){
+          } else if (!anterior.getPrimerVacios()){
             inicioVacio = [anterior]
           } else{
             inicioVacio.push(anterior)

@@ -4,6 +4,7 @@ import { InformacionService } from '../../services/informacion.service';
 import { GramaticaService } from '../../services/gramatica.service';
 import { InformacionComponent } from "../../informacion/informacion/informacion.component";
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-listado-gramaticas',
@@ -16,6 +17,7 @@ export class ListadoGramaticasComponent implements OnInit{
   gramaticas: GramaticaDatos[] = []
   private _informacion = inject(InformacionService)
   private _gramaticaService = inject(GramaticaService)
+  private _router = inject(Router)
 
   ngOnInit(): void {
       this._gramaticaService.obtenerTodas().subscribe({
@@ -30,6 +32,6 @@ export class ListadoGramaticasComponent implements OnInit{
   }
 
   usarAnalizador(gramatica: GramaticaDatos): void{
-
+    this._router.navigate([`/analizador/${gramatica.id}`]);
   }
 }
