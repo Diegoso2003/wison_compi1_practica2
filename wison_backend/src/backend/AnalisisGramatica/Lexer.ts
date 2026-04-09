@@ -7,7 +7,7 @@ export class Lexer{
     private linea: number = 1
     private columna: number = 1
     private input: string = ""
-    private saltosLinea: RegExp = /^(?:[\r\n?|\n])/
+    private saltosLinea: RegExp = /^(?:[\r\n|\r|\n])/
     private ignorados: RegExp = /^(?:[ \t]+)/
     private errores: MensajeError[] = []
 
@@ -40,6 +40,7 @@ export class Lexer{
             if(ignora){
                 this.input = this.input.slice(ignora[0].length)
                 this.columna += ignora[0].length
+                continue
             }
             let match: RegExpMatchArray | null
             let posibleMatch: RegExpMatchArray | null
@@ -71,7 +72,7 @@ export class Lexer{
         this.errores.push({
             tipo: "Léxico",
             linea: this.linea,
-            columna: this.columna,
+            columna: this.columna++,
             lexema: this.input.charAt(0),
             descripcion: "Caracter no reconocido."
         })

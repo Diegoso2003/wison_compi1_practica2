@@ -17,7 +17,6 @@ export class CreadorArbol{
         if(gramatica === null){
             throw new Error(`No se encontro ninguna gramatica con id: ${entrada.id}`)
         }
-        console.log(gramatica)
         let constructor = new ConstructorGramatica()
         let parser: Parser = constructor.construirGramatica(gramatica)
         parser.analizar(entrada.entrada)

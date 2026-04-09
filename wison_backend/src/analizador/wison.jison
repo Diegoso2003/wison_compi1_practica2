@@ -119,7 +119,7 @@
             lexema: yytext,
             linea: yylloc.first_line,
             columna: yylloc.first_column+1,
-            descripcion: `Caracter no reconocido: '${yytext}' (código ASCII: ${yytext.charCodeAt(0)})`
+            descripcion: `Caracter no reconocido: '${yytext}'`
         };
         
         errorManager.agregarError(errorLexico);

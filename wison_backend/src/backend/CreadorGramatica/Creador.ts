@@ -24,7 +24,6 @@ export class Creador {
   analizar(errores: MensajeError[]): void {
     this.errores = errores;
     this.validarLexer()
-    console.log("lexer validado")
     this.syntax.validarGramatica(this)
   }
 

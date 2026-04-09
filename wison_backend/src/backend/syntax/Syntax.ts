@@ -31,7 +31,6 @@ export class Syntax{
         this.tablaNoTerminales.forEach((noTerminal) => {
             noTerminal.agregarProduccionesVacias(creador)
         })
-        console.log("vacios añadidos")
     }
 
     private validarProducciones(creador: Creador): void{

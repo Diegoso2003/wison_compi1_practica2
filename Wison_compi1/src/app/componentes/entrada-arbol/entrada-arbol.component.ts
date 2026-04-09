@@ -18,8 +18,15 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   styleUrl: './entrada-arbol.component.scss'
 })
 export class EntradaArbolComponent implements AfterViewInit, OnInit{
-@ViewChild('codeEditor') codeEditor!: ElementRef<HTMLTextAreaElement>;
-  
+@ViewChild('codeEditor')
+set codeEditorSetter(element: ElementRef<HTMLTextAreaElement> | undefined) {
+  if (element) {
+    this.codeEditor = element;
+    this.setupEditorListeners();
+  }
+}
+
+codeEditor!: ElementRef<HTMLTextAreaElement>; 
   entradaForm: FormGroup;
   private id: number | undefined
   private _validador!: Validador;

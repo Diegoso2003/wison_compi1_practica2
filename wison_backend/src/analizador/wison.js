@@ -894,7 +894,7 @@ case 32:
             lexema: yy_.yytext,
             linea: yy_.yylloc.first_line,
             columna: yy_.yylloc.first_column+1,
-            descripcion: `Caracter no reconocido: '${yy_.yytext}' (código ASCII: ${yy_.yytext.charCodeAt(0)})`
+            descripcion: `Caracter no reconocido: '${yy_.yytext}'`
         };
         
         errorManager.agregarError(errorLexico);

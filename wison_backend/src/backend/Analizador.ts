@@ -45,19 +45,17 @@ export class Analizador {
         } catch (error: any) {
             console.log(error)
             const erroresParser:MensajeError[] = erroM.getErrores()
+            erroresParser.push({
+                lexema: "",
+                linea: 0,
+                columna: 0,
+                descripcion: "El parser no se pudo recuperar",
+                tipo: "Fatal"
+            })
             
             return {
                 ok: false,
-                errores: [
-                    ...erroresParser,
-                    {
-                        lexema: "",
-                        linea: 0,
-                        columna: 0,
-                        descripcion: error.message || "Error inesperado durante el análisis",
-                        tipo: "Fatal"
-                    }
-                ]
+                errores: erroresParser
             };
         }
     }

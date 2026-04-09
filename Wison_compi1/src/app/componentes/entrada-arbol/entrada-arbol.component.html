@@ -71,16 +71,20 @@
   </div>
 </div>
 } @else {
-  <div class="d-flex flex-column align-items-center">
-  <!-- Botón centrado -->
-  <div class="mb-4">
-    <button class="btn btn-primary" (click)="volver()">
-      <i class="bi bi-arrow-left me-2"></i>
+  <div class="vh-100 d-flex flex-column">
+  <!-- Botón fijo -->
+  <div class="bg-dark py-3 text-center">
+    <button class="btn btn-primary fw-semibold" (click)="volver()">
+      <i class="bi bi-arrow-left me-2 fs-4"></i>
       Volver
     </button>
   </div>
   
-  <!-- SVG centrado -->
-  <div [innerHTML]="svgContent"></div>
+  <!-- Área scrolleable -->
+  <div class="flex-grow-1" style="overflow: auto;">
+    <div style="display: inline-block; padding: 2rem; min-width: max-content;">
+      <div [innerHTML]="svgContent"></div>
+    </div>
+  </div>
 </div>
 }

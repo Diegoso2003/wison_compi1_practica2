@@ -94,4 +94,42 @@ export class EditorAnalizadorComponent implements AfterViewInit {
       this.editorForm.markAllAsTouched();
     }
   }
+
+  cargarArchivo(event: Event): void {
+  const input = event.target as HTMLInputElement;
+
+  if (!input.files || input.files.length === 0) return;
+
+  const archivo = input.files[0];
+
+  // Validar extensión opcional
+  if (!archivo.name.endsWith('.wison')) {
+    this._informacion.informarError('Seleccione un archivo .wison válido');
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    const contenido = reader.result as string;
+
+    this.editorForm.patchValue({
+      analizador: contenido
+    });
+
+    setTimeout(() => {
+  const textarea = this.codeEditor.nativeElement;
+  textarea.selectionStart = textarea.selectionEnd = textarea.value.length;
+  textarea.focus();
+  this.editorForm.get('analizador')?.markAsTouched();
+  this.actualizarPosicion();
+});
+  };
+
+  reader.onerror = () => {
+    this._informacion.informarError('Error al leer el archivo');
+  };
+
+  reader.readAsText(archivo);
+}
 }
